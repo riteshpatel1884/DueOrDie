@@ -4,7 +4,6 @@ import { useState, useEffect, useCallback } from "react";
 
 const STORAGE_KEY = "stackflow-goals";
 
-// ─── helpers ──────────────────────────────────────────────────────────────────
 
 export function todayStr() {
   return new Date().toISOString().split("T")[0];
