@@ -13,7 +13,7 @@ export default function NewGoalPage() {
   const [mode, setMode] = useState("normal");
   const [topicInput, setTopicInput] = useState("");
   const [topicDays, setTopicDays] = useState(1);
-  const [topics, setTopics] = useState([]); // [{name, days}]
+  const [topics, setTopics] = useState([]); //Note:  [{name, days}]
   const [error, setError] = useState("");
   const [editingIdx, setEditingIdx] = useState(null);
   const [editDays, setEditDays] = useState(1);
@@ -144,7 +144,7 @@ export default function NewGoalPage() {
           />
         </div>
 
-        {/* Deadline */}
+        {/* Deadline part*/}
         <div>
           <label
             style={{
@@ -210,7 +210,7 @@ export default function NewGoalPage() {
           </div>
         </div>
 
-        {/* Mode */}
+        {/* Mode part code*/}
         <div>
           <label
             style={{
@@ -277,7 +277,7 @@ export default function NewGoalPage() {
           </div>
         </div>
 
-        {/* Add topic */}
+        {/* Add topic code part*/}
         <div>
           <label
             style={{
