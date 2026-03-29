@@ -887,17 +887,7 @@ export default function HomePage() {
               <br />
               not comfort.
             </h2>
-            <p
-              style={{
-                fontSize: 14,
-                color: "var(--text3)",
-                maxWidth: 300,
-                lineHeight: 1.8,
-              }}
-            >
-              Every feature exists to hold you accountable — not to make you
-              feel good about falling behind.
-            </p>
+            
           </div>
 
           {/* Mosaic grid — unified border look */}
