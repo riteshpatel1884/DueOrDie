@@ -3,7 +3,7 @@ import Navbar from "./components/Navbar/Navbar";
 import "./globals.css";
 
 export const metadata = {
-  title: "StackFlow — Dynamic Backlog Pressure System",
+  title: "DueOrDie— Dynamic Backlog Pressure System",
   description: "Track your study goals. Feel the pressure. Get it done.",
 };
 

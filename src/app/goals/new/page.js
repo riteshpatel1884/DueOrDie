@@ -117,8 +117,8 @@ export default function NewGoalPage() {
         Create New Goal
       </h1>
       <p style={{ color: "var(--text3)", marginBottom: 32, fontSize: 14 }}>
-        Define topics, set per-topic duration, and let StackFlow build your
-        entire schedule.
+        Define topics, set per-topic duration, and let DueOrDiebuild your entire
+        schedule.
       </p>
 
       <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>

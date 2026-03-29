@@ -7,7 +7,7 @@ const features = [
   {
     icon: "📅",
     title: "Smart Daily Scheduling",
-    desc: "Add your topics, set a deadline — StackFlow automatically spreads every topic across every single day of your plan. No empty days, no guesswork.",
+    desc: "Add your topics, set a deadline — DueOrDieautomatically spreads every topic across every single day of your plan. No empty days, no guesswork.",
   },
   {
     icon: "⏱️",
@@ -32,7 +32,7 @@ const features = [
   {
     icon: "⏳",
     title: "Deadline Integrity",
-    desc: 'If you\'re falling behind pace, StackFlow tells you directly: "At this rate, you will miss your 60-day deadline." That hits differently than a to-do app.',
+    desc: 'If you\'re falling behind pace, DueOrDietells you directly: "At this rate, you will miss your 60-day deadline." That hits differently than a to-do app.',
   },
   {
     icon: "🔢",
@@ -60,7 +60,7 @@ const howItWorks = [
   {
     step: "03",
     title: "Get Your Schedule",
-    desc: "StackFlow distributes all topics evenly across your entire deadline — every day has something assigned.",
+    desc: "DueOrDiedistributes all topics evenly across your entire deadline — every day has something assigned.",
   },
   {
     step: "04",
@@ -99,8 +99,6 @@ export default function HomePage() {
           textAlign: "center",
         }}
       >
-        
-
         <h1
           style={{
             fontFamily: "Syne, sans-serif",
@@ -129,7 +127,7 @@ export default function HomePage() {
             lineHeight: 1.7,
           }}
         >
-          StackFlow turns missed study days into visible, growing pressure — so
+          DueOrDieturns missed study days into visible, growing pressure — so
           you can't ignore what you owe yourself. Unlike Notion or Todoist, we
           don't let you off the hook.
         </p>
@@ -502,7 +500,7 @@ export default function HomePage() {
           }}
         >
           Every day you delay is another day of backlog that will haunt you.
-          StackFlow makes sure you can't ignore it.
+          DueOrDiemakes sure you can't ignore it.
         </p>
         <Link
           href="/goals/new"
