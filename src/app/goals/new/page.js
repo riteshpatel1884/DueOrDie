@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useGoals } from "@/app/hooks/useGoals";
+import { useGoals, totalTopicDays } from "@/app/hooks/useGoals";
 
 export default function NewGoalPage() {
   const { addGoal } = useGoals();
@@ -12,22 +12,36 @@ export default function NewGoalPage() {
   const [deadlineDays, setDeadlineDays] = useState(30);
   const [mode, setMode] = useState("normal");
   const [topicInput, setTopicInput] = useState("");
-  const [topics, setTopics] = useState([]);
+  const [topicDays, setTopicDays] = useState(1);
+  const [topics, setTopics] = useState([]); // [{name, days}]
   const [error, setError] = useState("");
+  const [editingIdx, setEditingIdx] = useState(null);
+  const [editDays, setEditDays] = useState(1);
 
   const addTopic = () => {
     const trimmed = topicInput.trim();
     if (!trimmed) return;
-    if (topics.includes(trimmed)) {
+    if (topics.some((t) => t.name === trimmed)) {
       setError("Topic already added.");
       return;
     }
-    setTopics([...topics, trimmed]);
+    setTopics([
+      ...topics,
+      { name: trimmed, days: Math.max(1, Number(topicDays) || 1) },
+    ]);
     setTopicInput("");
+    setTopicDays(1);
     setError("");
   };
 
   const removeTopic = (i) => setTopics(topics.filter((_, idx) => idx !== i));
+
+  const saveEdit = (i) => {
+    const updated = [...topics];
+    updated[i] = { ...updated[i], days: Math.max(1, Number(editDays) || 1) };
+    setTopics(updated);
+    setEditingIdx(null);
+  };
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
@@ -44,8 +58,10 @@ export default function NewGoalPage() {
       .filter(Boolean);
     if (lines.length > 1) {
       e.preventDefault();
-      const unique = [...new Set([...topics, ...lines])];
-      setTopics(unique);
+      const newTopics = lines
+        .filter((l) => !topics.some((t) => t.name === l))
+        .map((l) => ({ name: l, days: 1 }));
+      setTopics([...topics, ...newTopics]);
     }
   };
 
@@ -62,7 +78,6 @@ export default function NewGoalPage() {
       setError("Deadline must be at least 1 day.");
       return;
     }
-
     const goal = addGoal({
       title: title.trim(),
       topics,
@@ -72,12 +87,15 @@ export default function NewGoalPage() {
     router.push(`/goals/${goal.id}`);
   };
 
-  const topicsPerDay =
-    topics.length > 0 ? (topics.length / deadlineDays).toFixed(1) : 0;
+  const reqDays = totalTopicDays(topics);
+  const avgPerDay =
+    topics.length > 0 && deadlineDays > 0
+      ? (reqDays / deadlineDays).toFixed(2)
+      : 0;
+  const overDeadline = reqDays > Number(deadlineDays);
 
   return (
     <div style={{ maxWidth: 720, margin: "0 auto", padding: "32px 24px" }}>
-      {/* Back */}
       <button
         onClick={() => router.back()}
         className="btn btn-ghost"
@@ -99,8 +117,8 @@ export default function NewGoalPage() {
         Create New Goal
       </h1>
       <p style={{ color: "var(--text3)", marginBottom: 32, fontSize: 14 }}>
-        Define what you want to learn, set a deadline, and let StackFlow handle
-        the pressure.
+        Define topics, set per-topic duration, and let StackFlow build your
+        entire schedule.
       </p>
 
       <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
@@ -140,7 +158,7 @@ export default function NewGoalPage() {
           >
             DEADLINE (DAYS)
           </label>
-          <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
             <input
               className="input"
               type="number"
@@ -148,16 +166,47 @@ export default function NewGoalPage() {
               max="365"
               value={deadlineDays}
               onChange={(e) => setDeadlineDays(e.target.value)}
-              style={{ maxWidth: 120 }}
+              style={{ maxWidth: 110 }}
             />
-            <span style={{ fontSize: 13, color: "var(--text3)" }}>
-              = {topics.length} topics over {deadlineDays} days
+            <div
+              style={{ fontSize: 13, color: "var(--text3)", lineHeight: 1.6 }}
+            >
               {topics.length > 0 && (
-                <span style={{ color: "var(--blue)", marginLeft: 6 }}>
-                  (~{topicsPerDay} topics/day)
-                </span>
+                <>
+                  <span>
+                    Topics need{" "}
+                    <strong
+                      style={{
+                        color: overDeadline ? "var(--accent)" : "var(--green)",
+                      }}
+                    >
+                      {reqDays} days
+                    </strong>{" "}
+                    total.
+                  </span>
+                  <br />
+                  <span style={{ color: "var(--text3)" }}>
+                    Schedule spans{" "}
+                    <strong style={{ color: "var(--blue)" }}>
+                      {deadlineDays} days
+                    </strong>{" "}
+                    → ~{avgPerDay} topic-days/calendar-day
+                  </span>
+                  {overDeadline && (
+                    <span
+                      style={{
+                        color: "var(--accent)",
+                        display: "block",
+                        marginTop: 2,
+                      }}
+                    >
+                      ⚠️ Deadline shorter than required — topics will be
+                      compressed.
+                    </span>
+                  )}
+                </>
               )}
-            </span>
+            </div>
           </div>
         </div>
 
@@ -197,6 +246,9 @@ export default function NewGoalPage() {
                   flex: 1,
                   padding: "14px 16px",
                   borderRadius: 10,
+                  cursor: "pointer",
+                  textAlign: "left",
+                  transition: "all 0.2s",
                   border: `2px solid ${mode === m.value ? (m.value === "hard" ? "var(--accent)" : "var(--blue)") : "var(--border)"}`,
                   background:
                     mode === m.value
@@ -204,9 +256,6 @@ export default function NewGoalPage() {
                         ? "rgba(255,77,77,0.07)"
                         : "rgba(74,158,255,0.07)"
                       : "var(--surface)",
-                  cursor: "pointer",
-                  textAlign: "left",
-                  transition: "all 0.2s",
                 }}
               >
                 <div style={{ fontSize: 18, marginBottom: 4 }}>{m.icon}</div>
@@ -228,7 +277,7 @@ export default function NewGoalPage() {
           </div>
         </div>
 
-        {/* Topics */}
+        {/* Add topic */}
         <div>
           <label
             style={{
@@ -242,61 +291,160 @@ export default function NewGoalPage() {
           >
             TOPICS{" "}
             <span style={{ color: "var(--text3)", fontWeight: 400 }}>
-              ({topics.length} added)
+              ({topics.length} added · {reqDays} total days)
             </span>
           </label>
           <p style={{ fontSize: 12, color: "var(--text3)", marginBottom: 10 }}>
-            Type a topic and press Enter. Or paste a comma/newline-separated
-            list.
+            Type a topic, set how many days it needs, then press Enter or Add.
+            Paste a comma-separated list to bulk-add (all get 1 day).
           </p>
           <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
             <input
               className="input"
-              placeholder="e.g. Linear Regression, SVM, Random Forests..."
+              placeholder="Topic name..."
               value={topicInput}
               onChange={(e) => setTopicInput(e.target.value)}
               onKeyDown={handleKeyDown}
               onPaste={handleBulkPaste}
+              style={{ flex: 2 }}
             />
-            <button
-              className="btn btn-secondary"
-              onClick={addTopic}
-              style={{ whiteSpace: "nowrap" }}
+            <div
+              style={{ display: "flex", alignItems: "center", gap: 6, flex: 1 }}
             >
+              <input
+                className="input"
+                type="number"
+                min="1"
+                max="30"
+                value={topicDays}
+                onChange={(e) => setTopicDays(e.target.value)}
+                style={{ width: 70, textAlign: "center" }}
+                title="Days needed for this topic"
+              />
+              <span
+                style={{
+                  fontSize: 12,
+                  color: "var(--text3)",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                days
+              </span>
+            </div>
+            <button className="btn btn-secondary" onClick={addTopic}>
               Add
             </button>
           </div>
 
+          {/* Topic list */}
           {topics.length > 0 && (
             <div
               style={{
                 background: "var(--bg2)",
                 borderRadius: 10,
                 border: "1px solid var(--border)",
-                padding: "12px 16px",
-                display: "flex",
-                flexWrap: "wrap",
-                gap: 8,
-                maxHeight: 240,
+                padding: "12px",
+                maxHeight: 300,
                 overflowY: "auto",
+                display: "flex",
+                flexDirection: "column",
+                gap: 6,
               }}
             >
               {topics.map((t, i) => (
-                <span
+                <div
                   key={i}
                   style={{
-                    display: "inline-flex",
+                    display: "flex",
                     alignItems: "center",
-                    gap: 6,
-                    padding: "5px 12px",
+                    gap: 10,
+                    padding: "9px 12px",
                     background: "var(--surface)",
+                    borderRadius: 8,
                     border: "1px solid var(--border)",
-                    borderRadius: 100,
-                    fontSize: 13,
-                    color: "var(--text)",
                   }}
                 >
-                  {t}
+                  <span style={{ flex: 1, fontSize: 13, color: "var(--text)" }}>
+                    {t.name}
+                  </span>
+
+                  {/* Inline day editor */}
+                  {editingIdx === i ? (
+                    <div
+                      style={{ display: "flex", alignItems: "center", gap: 6 }}
+                    >
+                      <input
+                        className="input"
+                        type="number"
+                        min="1"
+                        max="30"
+                        value={editDays}
+                        onChange={(e) => setEditDays(e.target.value)}
+                        style={{
+                          width: 60,
+                          padding: "4px 8px",
+                          fontSize: 13,
+                          textAlign: "center",
+                        }}
+                        autoFocus
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") saveEdit(i);
+                          if (e.key === "Escape") setEditingIdx(null);
+                        }}
+                      />
+                      <span style={{ fontSize: 12, color: "var(--text3)" }}>
+                        days
+                      </span>
+                      <button
+                        onClick={() => saveEdit(i)}
+                        style={{
+                          background: "var(--green)",
+                          border: "none",
+                          borderRadius: 5,
+                          cursor: "pointer",
+                          color: "white",
+                          padding: "3px 8px",
+                          fontSize: 12,
+                        }}
+                      >
+                        ✓
+                      </button>
+                      <button
+                        onClick={() => setEditingIdx(null)}
+                        style={{
+                          background: "none",
+                          border: "none",
+                          cursor: "pointer",
+                          color: "var(--text3)",
+                          fontSize: 14,
+                        }}
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => {
+                        setEditingIdx(i);
+                        setEditDays(t.days);
+                      }}
+                      style={{
+                        padding: "3px 10px",
+                        borderRadius: 100,
+                        fontSize: 12,
+                        cursor: "pointer",
+                        background:
+                          t.days > 1 ? "rgba(74,158,255,0.12)" : "var(--bg3)",
+                        color: t.days > 1 ? "var(--blue)" : "var(--text3)",
+                        border: `1px solid ${t.days > 1 ? "rgba(74,158,255,0.25)" : "var(--border)"}`,
+                        transition: "all 0.15s",
+                      }}
+                      title="Click to edit duration"
+                    >
+                      {t.days}d
+                    </button>
+                  )}
+
                   <button
                     onClick={() => removeTopic(i)}
                     style={{
@@ -304,9 +452,8 @@ export default function NewGoalPage() {
                       border: "none",
                       cursor: "pointer",
                       color: "var(--text3)",
-                      fontSize: 14,
-                      lineHeight: 1,
-                      padding: "0 2px",
+                      fontSize: 16,
+                      padding: "0 4px",
                       transition: "color 0.15s",
                     }}
                     onMouseEnter={(e) =>
@@ -318,7 +465,7 @@ export default function NewGoalPage() {
                   >
                     ×
                   </button>
-                </span>
+                </div>
               ))}
             </div>
           )}
@@ -350,19 +497,27 @@ export default function NewGoalPage() {
               padding: "14px 18px",
               fontSize: 13,
               color: "var(--text2)",
-              lineHeight: 1.8,
+              lineHeight: 1.9,
             }}
           >
             <strong style={{ color: "var(--text)" }}>"{title}"</strong> —{" "}
-            {topics.length} topics over{" "}
-            <strong style={{ color: "var(--text)" }}>
-              {deadlineDays} days
-            </strong>{" "}
-            starting today. That's{" "}
+            {topics.length} topics requiring{" "}
+            <strong style={{ color: "var(--text)" }}>{reqDays} days</strong> of
+            study, spread across{" "}
             <strong style={{ color: "var(--blue)" }}>
-              {topicsPerDay} topics/day
-            </strong>{" "}
-            on average. Mode:{" "}
+              {deadlineDays} calendar days
+            </strong>
+            .{" "}
+            {overDeadline ? (
+              <span style={{ color: "var(--accent)" }}>
+                Topics will be compressed to fit the deadline.
+              </span>
+            ) : (
+              <span style={{ color: "var(--green)" }}>
+                Every day in your schedule will have a topic assigned.
+              </span>
+            )}{" "}
+            Mode:{" "}
             <strong
               style={{
                 color: mode === "hard" ? "var(--accent)" : "var(--text)",
@@ -374,7 +529,6 @@ export default function NewGoalPage() {
           </div>
         )}
 
-        {/* Submit */}
         <button
           className="btn btn-primary"
           onClick={handleSubmit}

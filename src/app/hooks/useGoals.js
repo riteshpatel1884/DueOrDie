@@ -10,7 +10,7 @@ export function todayStr() {
   return new Date().toISOString().split("T")[0];
 }
 
-function addDays(dateStr, n) {
+export function addDays(dateStr, n) {
   const d = new Date(dateStr);
   d.setDate(d.getDate() + n);
   return d.toISOString().split("T")[0];
@@ -20,49 +20,85 @@ function daysBetween(a, b) {
   return Math.floor((new Date(b) - new Date(a)) / 86400000);
 }
 
+/** Sum of all topic days */
+export function totalTopicDays(topics) {
+  return topics.reduce(
+    (sum, t) => sum + (typeof t === "object" ? t.days || 1 : 1),
+    0,
+  );
+}
+
 /**
  * Build the daily schedule for a goal.
- * Each day gets an array of topic indices from the goal's topics list.
- * Missed days' topics spill into future days.
+ *
+ * Distribution logic:
+ * - Each topic has a `.days` field (default 1).
+ * - We build a "slot" array: each topic repeated for its duration.
+ * - We map all slots across ALL deadlineDays using a ratio so every day has content.
+ * - Result: 50 days / 21 topics → each day shows the topic being studied that day.
+ * - Topics needing 3 days appear across 3 consecutive days, etc.
  */
 export function buildSchedule(goal) {
   const { topics, startDate, deadlineDays, mode, dailyLogs } = goal;
-  const totalTopics = topics.length;
   const today = todayStr();
   const endDate = addDays(startDate, deadlineDays - 1);
 
-  // Base distribution: topics spread evenly across deadline days
-  const totalDays = deadlineDays;
-  const basePerDay = Math.ceil(totalTopics / totalDays);
+  // Normalize topics
+  const normalizedTopics = topics.map((t) =>
+    typeof t === "string"
+      ? { name: t, days: 1 }
+      : { name: t.name || t, days: t.days || 1 },
+  );
 
-  // Create base daily plan
-  let plan = [];
-  let assigned = 0;
-  for (let i = 0; i < totalDays; i++) {
-    const dateStr = addDays(startDate, i);
-    const count = Math.min(basePerDay, totalTopics - assigned);
-    const topicsForDay = topics.slice(assigned, assigned + count);
-    assigned += count;
-    plan.push({
-      date: dateStr,
-      topics: topicsForDay,
-      extra: [], // backlog added here
+  // Build slot array: topic name repeated for its duration
+  const slots = normalizedTopics.flatMap((t) => Array(t.days).fill(t.name));
+  const totalSlots = slots.length;
+  const totalDays = deadlineDays;
+
+  // Map each slot to a day index using ratio
+  const dayTopicMap = Array.from({ length: totalDays }, () => []);
+
+  if (totalSlots > 0) {
+    slots.forEach((topicName, slotIdx) => {
+      const dayIdx = Math.min(
+        Math.floor((slotIdx * totalDays) / totalSlots),
+        totalDays - 1,
+      );
+      // Only add if not already present for this day
+      if (!dayTopicMap[dayIdx].includes(topicName)) {
+        dayTopicMap[dayIdx].push(topicName);
+      }
     });
+
+    // Fill any empty days by inheriting from the nearest previous non-empty day
+    for (let i = 0; i < totalDays; i++) {
+      if (dayTopicMap[i].length === 0) {
+        for (let back = i - 1; back >= 0; back--) {
+          if (dayTopicMap[back].length > 0) {
+            dayTopicMap[i] = [...dayTopicMap[back]];
+            break;
+          }
+        }
+      }
+    }
   }
 
-  // Process logs: mark completed, collect missed
+  let plan = Array.from({ length: totalDays }, (_, i) => ({
+    date: addDays(startDate, i),
+    topics: dayTopicMap[i] || [],
+    extra: [],
+  }));
+
+  // Process logs & collect backlog
   let pendingBacklog = [];
 
   plan = plan.map((day) => {
     const log = dailyLogs?.[day.date];
-    const allTopics = [...day.topics, ...day.extra];
 
     if (!log) {
-      // Future day or not yet logged
       const isPast = day.date < today;
       if (isPast) {
-        // Missed — collect backlog
-        pendingBacklog.push(...allTopics);
+        pendingBacklog.push(...day.topics);
         return { ...day, status: "missed", completedTopics: [] };
       }
       return {
@@ -70,6 +106,10 @@ export function buildSchedule(goal) {
         status: day.date === today ? "today" : "upcoming",
         completedTopics: [],
       };
+    }
+
+    if (!log.completed) {
+      pendingBacklog.push(...(log.skippedTopics || []));
     }
 
     return {
@@ -87,14 +127,12 @@ export function buildSchedule(goal) {
     );
 
     if (mode === "hard") {
-      // Hard mode: all backlog dumps into next day
       const nextDay = futureDays[0];
       if (nextDay) {
         nextDay.extra = [...pendingBacklog];
         nextDay.hasBacklog = true;
       }
     } else {
-      // Normal mode: spread over next N days
       const spreadOver = Math.min(3, futureDays.length);
       const perDay = Math.ceil(pendingBacklog.length / Math.max(spreadOver, 1));
       for (let i = 0; i < spreadOver; i++) {
@@ -121,10 +159,6 @@ export function computeStats(goal) {
     .filter((d) => d.status === "done")
     .flatMap((d) => d.completedTopics || []).length;
 
-  const pendingTopics = plan
-    .filter((d) => d.date >= today)
-    .reduce((acc, d) => acc + d.topics.length + (d.extra?.length || 0), 0);
-
   const backlogTopics = plan
     .filter((d) => d.hasBacklog)
     .reduce((acc, d) => acc + (d.extra?.length || 0), 0);
@@ -136,12 +170,10 @@ export function computeStats(goal) {
   const elapsed = Math.max(0, daysBetween(goal.startDate, today));
   const remaining = Math.max(0, totalDays - elapsed);
 
-  // Pace: if current completion rate continues, will user finish?
   const completionRate = elapsed > 0 ? completedTopics / elapsed : 0;
   const projectedTotal = completionRate * totalDays;
   const onTrack = projectedTotal >= totalTopics * 0.9;
 
-  // Streak
   let streak = 0;
   const sortedDays = [...plan].reverse();
   for (const day of sortedDays) {
@@ -150,7 +182,6 @@ export function computeStats(goal) {
     else break;
   }
 
-  // Panic level 0-100
   const panicLevel = Math.min(
     100,
     missedDays * 15 + backlogTopics * 5 + (!onTrack && elapsed > 3 ? 20 : 0),
@@ -161,7 +192,6 @@ export function computeStats(goal) {
     doneDays,
     missedDays,
     completedTopics,
-    pendingTopics,
     backlogTopics,
     progress,
     remaining,
