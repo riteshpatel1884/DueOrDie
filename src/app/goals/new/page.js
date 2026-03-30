@@ -543,7 +543,7 @@ export default function NewGoalPage() {
                     ? "Add topics"
                     : !step3Done
                       ? "Set deadline"
-                      : "Ready to launch 🚀"}
+                      : "Ready to launch "}
               </span>
             </div>
             <h1
@@ -561,7 +561,7 @@ export default function NewGoalPage() {
             </h1>
             <p style={{ color: "var(--text3)", fontSize: 14 }}>
               Name your goal and we'll suggest topics automatically. Set how
-              many days each topic needs — StackFlow schedules everything.
+              many days each topic needs - StackFlow schedules everything.
             </p>
           </div>
 
@@ -585,20 +585,7 @@ export default function NewGoalPage() {
                   marginBottom: 16,
                 }}
               >
-                <div
-                  style={{
-                    width: 30,
-                    height: 30,
-                    borderRadius: 8,
-                    background: "rgba(255,77,77,0.1)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: 15,
-                  }}
-                >
-                  🎯
-                </div>
+                
                 <span
                   style={{
                     fontFamily: "Syne, sans-serif",
@@ -788,20 +775,7 @@ export default function NewGoalPage() {
                   marginBottom: 16,
                 }}
               >
-                <div
-                  style={{
-                    width: 30,
-                    height: 30,
-                    borderRadius: 8,
-                    background: "rgba(74,158,255,0.1)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: 15,
-                  }}
-                >
-                  📚
-                </div>
+                
                 <span
                   style={{
                     fontFamily: "Syne, sans-serif",
@@ -1273,14 +1247,14 @@ export default function NewGoalPage() {
                 {[
                   {
                     value: "normal",
-                    label: "Normal",
+                    label: "Normal Mode",
                     desc: "Backlog spreads over next 3 days. Manageable pressure.",
                     icon: "⚖️",
                     color: "var(--blue)",
                   },
                   {
                     value: "hard",
-                    label: "Hard Mode 🔥",
+                    label: "Hard Mode",
                     desc: "All backlog hits tomorrow. Maximum accountability.",
                     icon: "💀",
                     color: "var(--accent)",
@@ -1371,10 +1345,10 @@ export default function NewGoalPage() {
                     marginBottom: 8,
                   }}
                 >
-                  {overDeadline ? "⚠️" : "✅"} Schedule Summary
+                   Schedule Summary
                 </div>
                 <p>
-                  <strong style={{ color: "var(--text)" }}>"{title}"</strong> —{" "}
+                  <strong style={{ color: "var(--text)" }}>{title}</strong> - {" "}
                   {topics.length} topics needing{" "}
                   <strong
                     style={{
@@ -1407,8 +1381,8 @@ export default function NewGoalPage() {
                     }}
                   >
                     {mode === "hard"
-                      ? "💀 Hard — all backlog hits tomorrow"
-                      : "⚖️ Normal — backlog spreads over 3 days"}
+                      ? "💀 Hard - all backlog hits tomorrow"
+                      : "⚖️ Normal - backlog spreads over 3 days"}
                   </strong>
                 </p>
               </div>
@@ -1454,7 +1428,7 @@ export default function NewGoalPage() {
                     : "none";
               }}
             >
-              🚀 Create Goal & Build Schedule
+              Create Goal & Build Schedule
             </button>
           </div>
         </div>
