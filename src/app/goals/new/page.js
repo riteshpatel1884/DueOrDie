@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useGoals, totalTopicDays } from "@/app/hooks/useGoals";
 import { searchLibrary, TOPIC_LIBRARY } from "./topics";
 
-// ─── tiny helpers ─────────────────────────────────────────────────────────────
+// ─── tiny helpers 
 const S = (base, extra = {}) => ({ ...base, ...extra });
 
 // ─── Step indicator 
