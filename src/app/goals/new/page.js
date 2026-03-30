@@ -277,7 +277,7 @@ export default function NewGoalPage() {
           </div>
         </div>
 
-        {/* Add topic code part*/}
+       
         <div>
           <label
             style={{
@@ -336,7 +336,7 @@ export default function NewGoalPage() {
             </button>
           </div>
 
-          {/* Topic list */}
+      
           {topics.length > 0 && (
             <div
               style={{
