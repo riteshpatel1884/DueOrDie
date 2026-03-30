@@ -309,7 +309,7 @@ function TopicRow({
   );
 }
 
-// ─── Main page ────────────────────────────────────────────────────────────────
+// ─── Main page 
 export default function NewGoalPage() {
   const { addGoal } = useGoals();
   const router = useRouter();
