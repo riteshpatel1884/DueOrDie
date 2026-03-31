@@ -305,7 +305,7 @@ function AnswerModal({ question, onClose }) {
           {/* Modal body */}
           <div
             style={{ flex: 1, overflowY: "auto", padding: "20px 24px 24px" }}
-          >
+           >
             {activeTab === "full" ? (
               // Full answer view — clean readable prose
               <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
@@ -380,7 +380,7 @@ function AnswerModal({ question, onClose }) {
                   gridTemplateColumns: "1fr 1fr",
                   gap: 12,
                 }}
-              >
+               >
                 {["situation", "task", "action", "result"].map((key) => {
                   const cfg = STAR_LABELS[key];
                   return (

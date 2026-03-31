@@ -53,12 +53,18 @@ export const STAR_QUESTIONS = [
       "During a group project, your teammate insists on using a technology you've never used, while you believe your approach is more practical. Describe how you handled the disagreement.",
     tags: ["conflict resolution", "technical decision", "compromise"],
     situation:
-      "During my final-year capstone project, my teammate wanted to use GraphQL for our API layer, while I believed REST was the more practical choice given our tight 3-week timeline and the team's existing familiarity with REST.",
-    task: "I needed to resolve the technical disagreement constructively without damaging team morale, while still ensuring we made the best technical decision for the project's success.",
-    action:
-      "I suggested we each spend 30 minutes preparing a brief pros-and-cons list for both approaches, then present our cases to the group. I acknowledged my teammate's point that GraphQL offered better flexibility for future features, but highlighted that REST would reduce our learning curve and risk given the deadline. We compromised: we used REST for the core API and I committed to learning GraphQL basics, agreeing it would be considered for the next sprint.",
+      "In our major project on medical plant identification using ML, my teammate wanted to use a technology stack that none of us had experience with. He wanted to experiment, while I was focused on building a stable, working system within our deadline.",
+    task: "My goal was to ensure we chose a stack that allowed smooth integration with our ML model, faster development, and minimal risk of delays. ",
+    action: `So Instead of rejecting his idea outright, I asked him to explain the benefits of his approach. Then I compared both options based on development speed, learning curve, integration with the ML backend, and team familiarity.
+
+I proposed a more practical full-stack approach:
+
+React.js for the frontend (for building a responsive UI to upload plant images), 
+Node.js + Express.js for the backend (to handle API requests), 
+Python (Flask API) for serving the trained ML model, and 
+MongoDB for storing user queries and results. I explained that this setup cleanly separates concerns: the ML model stays in Python where it belongs, while the web layer handles user interaction. This reduces complexity instead of forcing everything into one unfamiliar stack. I also highlighted that our team already had some experience with React and Node, which would speed up development.`,
     result:
-      "We delivered the project on time with full functionality. More importantly, I learned GraphQL over the following week and we did implement it for one endpoint as a stretch goal. The disagreement actually strengthened our team dynamic by establishing a culture of evidence-based decision making.",
+      "We finalized this hybrid web + ML stack. We were able to build a functional web interface where users could upload plant images and get predictions from our model. The project was completed on time, and the system worked reliably. Ultimately, this safeguards the project from potential risk and focused on delivering a usable product rather than chasing new technologies without a clear benefit.",
   },
   {
     id: 2,
