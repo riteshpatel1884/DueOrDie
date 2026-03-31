@@ -5,37 +5,37 @@ export const STAR_CATEGORIES = [
   {
     id: "teamwork",
     label: "Teamwork & Collaboration",
-    emoji: "🤝",
+
     color: "#3b82f6",
   },
   {
     id: "problem-solving",
     label: "Problem-Solving & Critical Thinking",
-    emoji: "🧠",
+
     color: "#8b5cf6",
   },
   {
     id: "time-management",
     label: "Time Management & Prioritization",
-    emoji: "⏱️",
+
     color: "#f59e0b",
   },
   {
     id: "communication",
     label: "Communication & Presentation",
-    emoji: "📣",
+
     color: "#10b981",
   },
   {
     id: "learning",
     label: "Learning & Adaptability",
-    emoji: "💡",
+
     color: "#06b6d4",
   },
   {
     id: "initiative",
     label: "Initiative & Leadership",
-    emoji: "🎯",
+
     color: "#f97316",
   },
 ];
@@ -45,7 +45,7 @@ export const STAR_QUESTIONS = [
   {
     id: 1,
     category: "teamwork",
-    categoryEmoji: "🤝",
+
     categoryLabel: "Teamwork & Collaboration",
     categoryColor: "#3b82f6",
     title: "Conflicting Approaches",
@@ -63,7 +63,7 @@ export const STAR_QUESTIONS = [
   {
     id: 2,
     category: "teamwork",
-    categoryEmoji: "🤝",
+
     categoryLabel: "Teamwork & Collaboration",
     categoryColor: "#3b82f6",
     title: "Underperforming Team Member",
@@ -81,7 +81,7 @@ export const STAR_QUESTIONS = [
   {
     id: 3,
     category: "teamwork",
-    categoryEmoji: "🤝",
+
     categoryLabel: "Teamwork & Collaboration",
     categoryColor: "#3b82f6",
     title: "Last-Minute Absence",
@@ -99,7 +99,7 @@ export const STAR_QUESTIONS = [
   {
     id: 4,
     category: "teamwork",
-    categoryEmoji: "🤝",
+
     categoryLabel: "Teamwork & Collaboration",
     categoryColor: "#3b82f6",
     title: "Remote Collaboration",
@@ -117,7 +117,7 @@ export const STAR_QUESTIONS = [
   {
     id: 5,
     category: "teamwork",
-    categoryEmoji: "🤝",
+
     categoryLabel: "Teamwork & Collaboration",
     categoryColor: "#3b82f6",
     title: "Unequal Workload",
@@ -137,7 +137,7 @@ export const STAR_QUESTIONS = [
   {
     id: 6,
     category: "problem-solving",
-    categoryEmoji: "🧠",
+
     categoryLabel: "Problem-Solving & Critical Thinking",
     categoryColor: "#8b5cf6",
     title: "Bug Under Pressure",
@@ -155,7 +155,7 @@ export const STAR_QUESTIONS = [
   {
     id: 7,
     category: "problem-solving",
-    categoryEmoji: "🧠",
+
     categoryLabel: "Problem-Solving & Critical Thinking",
     categoryColor: "#8b5cf6",
     title: "Unclear Requirements",
@@ -173,7 +173,7 @@ export const STAR_QUESTIONS = [
   {
     id: 8,
     category: "problem-solving",
-    categoryEmoji: "🧠",
+
     categoryLabel: "Problem-Solving & Critical Thinking",
     categoryColor: "#8b5cf6",
     title: "Resource Constraints",
@@ -191,7 +191,7 @@ export const STAR_QUESTIONS = [
   {
     id: 9,
     category: "problem-solving",
-    categoryEmoji: "🧠",
+
     categoryLabel: "Problem-Solving & Critical Thinking",
     categoryColor: "#8b5cf6",
     title: "Unexpected Failure",
@@ -209,7 +209,7 @@ export const STAR_QUESTIONS = [
   {
     id: 10,
     category: "problem-solving",
-    categoryEmoji: "🧠",
+
     categoryLabel: "Problem-Solving & Critical Thinking",
     categoryColor: "#8b5cf6",
     title: "Novel Problem",
@@ -229,7 +229,7 @@ export const STAR_QUESTIONS = [
   {
     id: 11,
     category: "time-management",
-    categoryEmoji: "⏱️",
+
     categoryLabel: "Time Management & Prioritization",
     categoryColor: "#f59e0b",
     title: "Competing Deadlines",
@@ -247,7 +247,7 @@ export const STAR_QUESTIONS = [
   {
     id: 12,
     category: "time-management",
-    categoryEmoji: "⏱️",
+
     categoryLabel: "Time Management & Prioritization",
     categoryColor: "#f59e0b",
     title: "Scope Creep",
@@ -265,7 +265,7 @@ export const STAR_QUESTIONS = [
   {
     id: 13,
     category: "time-management",
-    categoryEmoji: "⏱️",
+
     categoryLabel: "Time Management & Prioritization",
     categoryColor: "#f59e0b",
     title: "Underestimated Task",
@@ -283,7 +283,7 @@ export const STAR_QUESTIONS = [
   {
     id: 14,
     category: "time-management",
-    categoryEmoji: "⏱️",
+
     categoryLabel: "Time Management & Prioritization",
     categoryColor: "#f59e0b",
     title: "Procrastination Recovery",
@@ -301,7 +301,7 @@ export const STAR_QUESTIONS = [
   {
     id: 15,
     category: "time-management",
-    categoryEmoji: "⏱️",
+
     categoryLabel: "Time Management & Prioritization",
     categoryColor: "#f59e0b",
     title: "Balancing Academics and Internship",
@@ -321,7 +321,7 @@ export const STAR_QUESTIONS = [
   {
     id: 16,
     category: "communication",
-    categoryEmoji: "📣",
+
     categoryLabel: "Communication & Presentation",
     categoryColor: "#10b981",
     title: "Explaining to a Non-Technical Audience",
@@ -339,7 +339,7 @@ export const STAR_QUESTIONS = [
   {
     id: 17,
     category: "communication",
-    categoryEmoji: "📣",
+
     categoryLabel: "Communication & Presentation",
     categoryColor: "#10b981",
     title: "Delivering Bad News",
@@ -357,7 +357,7 @@ export const STAR_QUESTIONS = [
   {
     id: 18,
     category: "communication",
-    categoryEmoji: "📣",
+
     categoryLabel: "Communication & Presentation",
     categoryColor: "#10b981",
     title: "Giving Constructive Feedback",
@@ -375,7 +375,7 @@ export const STAR_QUESTIONS = [
   {
     id: 19,
     category: "communication",
-    categoryEmoji: "📣",
+
     categoryLabel: "Communication & Presentation",
     categoryColor: "#10b981",
     title: "Receiving Critical Feedback",
@@ -393,7 +393,7 @@ export const STAR_QUESTIONS = [
   {
     id: 20,
     category: "communication",
-    categoryEmoji: "📣",
+
     categoryLabel: "Communication & Presentation",
     categoryColor: "#10b981",
     title: "Presenting with Confidence",
@@ -413,7 +413,7 @@ export const STAR_QUESTIONS = [
   {
     id: 21,
     category: "learning",
-    categoryEmoji: "💡",
+
     categoryLabel: "Learning & Adaptability",
     categoryColor: "#06b6d4",
     title: "Learning a New Technology Quickly",
@@ -431,7 +431,7 @@ export const STAR_QUESTIONS = [
   {
     id: 22,
     category: "learning",
-    categoryEmoji: "💡",
+
     categoryLabel: "Learning & Adaptability",
     categoryColor: "#06b6d4",
     title: "Changing Requirements Mid-Project",
@@ -449,7 +449,7 @@ export const STAR_QUESTIONS = [
   {
     id: 23,
     category: "learning",
-    categoryEmoji: "💡",
+
     categoryLabel: "Learning & Adaptability",
     categoryColor: "#06b6d4",
     title: "Failure as a Learning Experience",
@@ -467,7 +467,7 @@ export const STAR_QUESTIONS = [
   {
     id: 24,
     category: "learning",
-    categoryEmoji: "💡",
+
     categoryLabel: "Learning & Adaptability",
     categoryColor: "#06b6d4",
     title: "Self-Directed Learning",
@@ -485,7 +485,7 @@ export const STAR_QUESTIONS = [
   {
     id: 25,
     category: "learning",
-    categoryEmoji: "💡",
+
     categoryLabel: "Learning & Adaptability",
     categoryColor: "#06b6d4",
     title: "Unfamiliar Domain",
@@ -505,7 +505,7 @@ export const STAR_QUESTIONS = [
   {
     id: 26,
     category: "initiative",
-    categoryEmoji: "🎯",
+
     categoryLabel: "Initiative & Leadership",
     categoryColor: "#f97316",
     title: "Spotting an Improvement",
@@ -523,7 +523,7 @@ export const STAR_QUESTIONS = [
   {
     id: 27,
     category: "initiative",
-    categoryEmoji: "🎯",
+
     categoryLabel: "Initiative & Leadership",
     categoryColor: "#f97316",
     title: "Taking Ownership",
@@ -541,7 +541,7 @@ export const STAR_QUESTIONS = [
   {
     id: 28,
     category: "initiative",
-    categoryEmoji: "🎯",
+
     categoryLabel: "Initiative & Leadership",
     categoryColor: "#f97316",
     title: "Proposing a New Idea",
@@ -559,7 +559,7 @@ export const STAR_QUESTIONS = [
   {
     id: 29,
     category: "initiative",
-    categoryEmoji: "🎯",
+
     categoryLabel: "Initiative & Leadership",
     categoryColor: "#f97316",
     title: "Mentoring a Peer",
@@ -577,7 +577,7 @@ export const STAR_QUESTIONS = [
   {
     id: 30,
     category: "initiative",
-    categoryEmoji: "🎯",
+
     categoryLabel: "Initiative & Leadership",
     categoryColor: "#f97316",
     title: "Going Beyond the Brief",

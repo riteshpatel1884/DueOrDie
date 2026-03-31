@@ -584,22 +584,7 @@ function QuestionCard({ question, index, onOpen }) {
               {question.categoryEmoji} {question.categoryLabel}
             </span>
           </div>
-          <div
-            style={{
-              width: 28,
-              height: 28,
-              borderRadius: 8,
-              background: "var(--bg2)",
-              border: "1px solid var(--border)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: 12,
-              color: "var(--text3)",
-            }}
-          >
-            →
-          </div>
+          
         </div>
 
         {/* Title */}
@@ -632,7 +617,7 @@ function QuestionCard({ question, index, onOpen }) {
           {question.question}
         </p>
 
-        {/* STAR mini badges */}
+        {/* STAR mini badges
         <div style={{ display: "flex", gap: 4 }}>
           {["S", "T", "A", "R"].map((l, i) => {
             const keys = ["situation", "task", "action", "result"];
@@ -676,7 +661,7 @@ function QuestionCard({ question, index, onOpen }) {
               </span>
             ))}
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
@@ -732,20 +717,7 @@ export default function StarInterviewPage() {
               marginBottom: 10,
             }}
           >
-            <div
-              style={{
-                padding: "4px 14px",
-                borderRadius: 100,
-                fontSize: 12,
-                background: "rgba(255,77,77,0.08)",
-                border: "1px solid rgba(255,77,77,0.2)",
-                color: "var(--accent)",
-                fontFamily: "Space Mono, monospace",
-                fontWeight: 600,
-              }}
-            >
-              INTERVIEW PREP
-            </div>
+           
             <span
               style={{
                 fontSize: 12,
@@ -788,7 +760,7 @@ export default function StarInterviewPage() {
                   lineHeight: 1.6,
                 }}
               >
-                30 behavioural & situational questions for fresh engineers —
+                30 behavioural & situational questions for fresh engineers -
                 each with a full model answer structured as Situation · Task ·
                 Action · Result.
               </p>
