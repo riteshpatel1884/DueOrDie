@@ -164,7 +164,7 @@ export default function Navbar() {
               ))}
             </div>
 
-            {/* Theme toggle + Divider */}
+            {/* Theme toggle + . */}
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
               <div
                 style={{
