@@ -297,7 +297,7 @@ export default function TodayPage() {
           const isDone = !!checked[t];
           return (
             <div
-              key={t}
+              key={`topic-${i}-${t}`}
               onClick={() => toggle(t)}
               style={{
                 display: "flex",
@@ -375,34 +375,29 @@ export default function TodayPage() {
 
       {/* Submit buttons */}
       {!alreadyLogged ? (
-        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-          <button
-            className="btn btn-primary"
-            onClick={() => handleSubmit(true)}
-            style={{ justifyContent: "center", padding: "14px", fontSize: 15 }}
-          >
-            ✅ Submit — Day Complete ({checkedCount}/{totalCount} done)
-          </button>
-          {checkedCount < totalCount && (
-            <button
-              className="btn btn-secondary"
-              onClick={() => handleSubmit(false)}
-              style={{
-                justifyContent: "center",
-                padding: "12px",
-                fontSize: 14,
-                color: "var(--text3)",
-              }}
-            >
-              Partial submit — log {checkedCount} done, mark rest as backlog
-            </button>
-          )}
-        </div>
+        <button
+          className="btn btn-primary"
+          onClick={() => handleSubmit(true)}
+          style={{
+            width: "100%",
+            justifyContent: "center",
+            padding: "14px",
+            fontSize: 15,
+          }}
+        >
+         Submit. Day Complete ({checkedCount}/{totalCount} done)
+        </button>
       ) : (
         <Link
           href={`/goals/${id}`}
           className="btn btn-secondary"
-          style={{ justifyContent: "center", padding: "14px", fontSize: 14 }}
+          style={{
+            justifyContent: "center",
+            padding: "14px",
+            fontSize: 14,
+            display: "block",
+            textAlign: "center",
+          }}
         >
           ← Back to Schedule
         </Link>

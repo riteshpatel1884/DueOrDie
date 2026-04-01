@@ -165,13 +165,7 @@ export default function GoalDetailPage() {
           >
             {goal.mode === "hard" ? "🔥 Hard Mode" : "⚖️ Normal Mode"}
           </button>
-          <Link
-            href={`/goals/${id}/today`}
-            className="btn btn-primary"
-            style={{ fontSize: 13 }}
-          >
-            Log Today
-          </Link>
+         
           <button
             onClick={handleDelete}
             className="btn btn-ghost"
