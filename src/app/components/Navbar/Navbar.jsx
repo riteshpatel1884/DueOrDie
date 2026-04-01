@@ -296,7 +296,7 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Mobile menu. */}
+        {/* Mobile menu.. */}
         {mobileMenuOpen && (
           <div
             style={{
