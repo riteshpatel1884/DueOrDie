@@ -237,7 +237,7 @@ export default function Navbar() {
               {theme === "dark" ? "☀️" : "🌙"}
             </button>
 
-            {/* Hamburger menu */}
+            {/* Hamburger menu. */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               style={{
