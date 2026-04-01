@@ -110,7 +110,7 @@ export default function Navbar() {
               gap: 12,
             }}
           >
-            {/* Nav links */}
+            {/* Nav links. */}
             <div
               style={{
                 display: "flex",
