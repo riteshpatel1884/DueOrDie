@@ -3,23 +3,20 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTheme } from "@/app/theme/Themecontext";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  const [scrolled, setScrolled] = useState(false);
+  const [indicatorStyle, setIndicatorStyle] = useState({
+    left: 0,
+    width: 0,
+    opacity: 0,
+  });
+  const navPillRef = useRef(null);
+  const linkRefs = useRef({});
 
   const links = [
     { href: "/", label: "Dashboard"},
@@ -28,330 +25,502 @@ export default function Navbar() {
 
   const isActive = (href) => pathname === href;
 
+  // Scroll detection for frosted glass effect
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 10);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Animated sliding indicator under active nav link
+  useEffect(() => {
+    const activeLink = links.find((l) => isActive(l.href));
+    if (activeLink && linkRefs.current[activeLink.href] && navPillRef.current) {
+      const el = linkRefs.current[activeLink.href];
+      const parent = navPillRef.current;
+      const parentRect = parent.getBoundingClientRect();
+      const elRect = el.getBoundingClientRect();
+      setIndicatorStyle({
+        left: elRect.left - parentRect.left,
+        width: elRect.width,
+        opacity: 1,
+      });
+    }
+  }, [pathname]);
+
   return (
     <>
       <style>{`
-        @media (max-width: 767px) {
-          .desktop-nav {
-            display: none !important;
-          }
+        /* ── Navbar shell ── */
+        .nb-root {
+          position: sticky;
+          top: 0;
+          z-index: 100;
         }
 
+        .nb-glass {
+          background: ${
+            scrolled
+              ? "color-mix(in srgb, var(--bg) 82%, transparent)"
+              : "var(--bg)"
+          };
+          backdrop-filter: ${scrolled ? "blur(20px) saturate(160%)" : "none"};
+          -webkit-backdrop-filter: ${scrolled ? "blur(20px) saturate(160%)" : "none"};
+          border-bottom: 1px solid ${scrolled ? "var(--border)" : "transparent"};
+          transition: background 0.4s ease, border-color 0.4s ease, backdrop-filter 0.4s ease;
+          position: relative;
+        }
+
+        .nb-container {
+          max-width: 1100px;
+          margin: 0 auto;
+          padding: 0 20px;
+          height: 62px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 16px;
+        }
+
+        /* ── Logo ── */
+        .nb-logo {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          text-decoration: none;
+          flex-shrink: 0;
+        }
+
+        .nb-logo-mark {
+          width: 34px;
+          height: 34px;
+          border-radius: 9px;
+          background: var(--accent);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 14px;
+          font-weight: 900;
+          color: var(--accent-fg);
+          font-family: 'Syne', sans-serif;
+          letter-spacing: -1px;
+          position: relative;
+          overflow: hidden;
+          flex-shrink: 0;
+          transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+                      box-shadow 0.3s ease;
+        }
+
+        .nb-logo-mark::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(135deg, rgba(255,255,255,0.18) 0%, transparent 55%);
+          pointer-events: none;
+        }
+
+        .nb-logo:hover .nb-logo-mark {
+          transform: rotate(-8deg) scale(1.1);
+          box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+        }
+
+        .nb-logo-text {
+          font-family: 'Syne', sans-serif;
+          font-weight: 800;
+          font-size: 19px;
+          color: var(--text);
+          letter-spacing: -0.6px;
+          line-height: 1;
+          display: block;
+          transition: color 0.2s;
+        }
+
+        .nb-logo-sub {
+          font-family: 'DM Sans', sans-serif;
+          font-size: 10px;
+          font-weight: 500;
+          color: var(--text3);
+          letter-spacing: 0.09em;
+          text-transform: uppercase;
+          margin-top: 2px;
+          display: block;
+        }
+
+        /* ── Desktop pill track ── */
+        .nb-pill-track {
+          position: relative;
+          display: flex;
+          align-items: center;
+          gap: 2px;
+          background: var(--surface);
+          border: 1px solid var(--border);
+          border-radius: 13px;
+          padding: 4px;
+        }
+
+        .nb-indicator {
+          position: absolute;
+          top: 4px;
+          height: calc(100% - 8px);
+          background: var(--accent);
+          border-radius: 9px;
+          transition: left 0.38s cubic-bezier(0.4, 0, 0.2, 1),
+                      width 0.38s cubic-bezier(0.4, 0, 0.2, 1),
+                      opacity 0.25s ease;
+          z-index: 0;
+          box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+        }
+
+        .nb-link {
+          position: relative;
+          z-index: 1;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          padding: 7px 15px;
+          border-radius: 9px;
+          font-size: 13.5px;
+          font-weight: 600;
+          font-family: 'DM Sans', sans-serif;
+          text-decoration: none;
+          letter-spacing: 0.01em;
+          transition: color 0.22s ease;
+          cursor: pointer;
+          white-space: nowrap;
+          border: none;
+          background: none;
+        }
+
+        .nb-link.is-active {
+          color: var(--accent-fg);
+        }
+
+        .nb-link.is-inactive {
+          color: var(--text2);
+        }
+
+        .nb-link.is-inactive:hover {
+          color: var(--text);
+        }
+
+        .nb-link-icon {
+          font-size: 11px;
+          opacity: 0.65;
+          transition: opacity 0.2s, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .nb-link:hover .nb-link-icon {
+          opacity: 1;
+          transform: scale(1.25) rotate(-5deg);
+        }
+
+        .nb-link.is-active .nb-link-icon {
+          opacity: 0.9;
+        }
+
+        /* ── Divider ── */
+        .nb-divider {
+          width: 1px;
+          height: 20px;
+          background: var(--border);
+          opacity: 0.5;
+          flex-shrink: 0;
+        }
+
+        /* ── Theme button ── */
+        .nb-theme-btn {
+          width: 38px;
+          height: 38px;
+          border-radius: 10px;
+          border: 1px solid var(--border);
+          background: var(--surface);
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 16px;
+          transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1),
+                      border-color 0.2s,
+                      box-shadow 0.2s;
+          color: var(--text);
+          flex-shrink: 0;
+        }
+
+        .nb-theme-btn:hover {
+          border-color: var(--border2);
+          transform: translateY(-2px) rotate(12deg);
+          box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+        }
+
+        .nb-theme-btn:active {
+          transform: scale(0.9);
+        }
+
+        /* ── Desktop nav wrapper ── */
+        .nb-desktop {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+
+        /* ── Scroll glow accent ── */
+        .nb-glow {
+          position: absolute;
+          bottom: 0;
+          left: 50%;
+          transform: translateX(-50%);
+          height: 1px;
+          width: ${scrolled ? "35%" : "0%"};
+          background: linear-gradient(90deg, transparent, var(--accent), transparent);
+          opacity: ${scrolled ? "0.35" : "0"};
+          transition: width 0.6s ease, opacity 0.6s ease;
+          pointer-events: none;
+        }
+
+        /* ── Mobile controls ── */
+        .nb-mobile-controls {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+
+        .nb-burger {
+          width: 38px;
+          height: 38px;
+          border-radius: 10px;
+          border: 1px solid var(--border);
+          background: var(--surface);
+          cursor: pointer;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 5px;
+          padding: 0;
+          transition: border-color 0.2s, background 0.2s;
+        }
+
+        .nb-burger:hover {
+          border-color: var(--border2);
+          background: var(--surface2);
+        }
+
+        .nb-burger-line {
+          width: 17px;
+          height: 1.5px;
+          background: var(--text);
+          border-radius: 2px;
+          transform-origin: center;
+          transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                      opacity 0.25s ease,
+                      width 0.25s ease;
+        }
+
+        /* ── Mobile drawer ── */
+        .nb-drawer {
+          position: absolute;
+          top: calc(100% + 6px);
+          left: 12px;
+          right: 12px;
+          background: var(--surface);
+          border: 1px solid var(--border);
+          border-radius: 16px;
+          padding: 8px;
+          box-shadow: 0 24px 56px rgba(0,0,0,0.22), 0 4px 16px rgba(0,0,0,0.1);
+          animation: drawerReveal 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+          z-index: 99;
+        }
+
+        @keyframes drawerReveal {
+          from { opacity: 0; transform: translateY(-10px) scale(0.97); }
+          to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .nb-drawer-link {
+          display: flex;
+          align-items: center;
+          gap: 11px;
+          padding: 11px 13px;
+          border-radius: 10px;
+          font-size: 14px;
+          font-weight: 600;
+          font-family: 'DM Sans', sans-serif;
+          text-decoration: none;
+          transition: all 0.2s;
+          cursor: pointer;
+        }
+
+        .nb-drawer-link.is-active {
+          background: var(--accent);
+          color: var(--accent-fg);
+        }
+
+        .nb-drawer-link.is-inactive {
+          color: var(--text2);
+        }
+
+        .nb-drawer-link.is-inactive:hover {
+          background: var(--surface2);
+          color: var(--text);
+        }
+
+        .nb-drawer-icon {
+          width: 30px;
+          height: 30px;
+          border-radius: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 13px;
+          background: var(--accent-subtle);
+          border: 1px solid var(--accent-border);
+          flex-shrink: 0;
+          transition: transform 0.2s;
+        }
+
+        .nb-drawer-link.is-active .nb-drawer-icon {
+          background: rgba(255,255,255,0.15);
+          border-color: rgba(255,255,255,0.2);
+        }
+
+        .nb-drawer-link:hover .nb-drawer-icon {
+          transform: scale(1.1);
+        }
+
+        .nb-drawer-dot {
+          margin-left: auto;
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background: var(--accent-fg);
+          opacity: 0.5;
+        }
+
+        .nb-drawer-sep {
+          height: 1px;
+          background: var(--border);
+          margin: 6px 2px;
+          opacity: 0.4;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 767px) {
+          .nb-desktop { display: none !important; }
+        }
         @media (min-width: 768px) {
-          .mobile-controls {
-            display: none !important;
-          }
+          .nb-mobile-controls { display: none !important; }
+          .nb-drawer { display: none !important; }
         }
       `}</style>
 
-      <nav
-        style={{
-          background: "var(--bg2)",
-          borderBottom: "1px solid var(--border)",
-          position: "sticky",
-          top: 0,
-          zIndex: 50,
-          backdropFilter: "blur(12px)",
-        }}
-      >
-        <div
-          style={{
-            maxWidth: 1100,
-            margin: "0 auto",
-            padding: "0 24px",
-            height: 64,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-         
-          <Link href="/" style={{ textDecoration: "none" }}>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 12,
-                cursor: "pointer",
-                transition: "transform 0.3s ease",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "scale(1.02)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "scale(1)";
-              }}
-            >
-             
+      <div className="nb-root">
+        <div className="nb-glass">
+          <div className="nb-container">
+            {/* ── Logo ── */}
+            <Link href="/" className="nb-logo">
+              
               <div>
-                <span
-                  style={{
-                    fontFamily: "Syne, sans-serif",
-                    fontWeight: 800,
-                    fontSize: 20,
-                    color: "var(--text)",
-                    letterSpacing: "-0.5px",
-                    display: "block",
-                  }}
-                >
-                  DueOrDie
-                </span>
+                <span className="nb-logo-text">DueOrDie</span>
                 
               </div>
-            </div>
-          </Link>
+            </Link>
 
-          {/* Desktop Navigation. */}
-          <div
-            className="desktop-nav"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 12,
-            }}
-          >
-            {/* Nav links. */}
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 8,
-                background: "var(--surface)",
-                borderRadius: 12,
-                padding: "4px 4px",
-                border: "1px solid var(--border)",
-              }}
-            >
-              {links.map((l) => (
-                <Link
-                  key={l.href}
-                  href={l.href}
-                  style={{
-                    padding: "8px 14px",
-                    borderRadius: 10,
-                    fontSize: 14,
-                    fontWeight: 500,
-                    textDecoration: "none",
-                    color: isActive(l.href) ? "var(--blue)" : "var(--text2)",
-                    background: isActive(l.href)
-                      ? "rgba(66, 153, 225, 0.1)"
-                      : "transparent",
-                    border: `1px solid ${isActive(l.href) ? "rgba(66, 153, 225, 0.3)" : "transparent"}`,
-                    transition: "all 0.2s",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 6,
-                    cursor: "pointer",
-                  }}
-                  onMouseEnter={(e) => {
-                    if (!isActive(l.href)) {
-                      e.currentTarget.style.background =
-                        "rgba(66, 153, 225, 0.05)";
-                      e.currentTarget.style.borderColor =
-                        "rgba(66, 153, 225, 0.2)";
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (!isActive(l.href)) {
-                      e.currentTarget.style.background = "transparent";
-                      e.currentTarget.style.borderColor = "transparent";
-                    }
-                  }}
-                >
-                  <span style={{ fontSize: 16 }}></span>
-                  {l.label}
-                </Link>
-              ))}
-            </div>
+            {/* ── Desktop Nav ── */}
+            <div className="nb-desktop">
+              <div className="nb-pill-track" ref={navPillRef}>
+                <div className="nb-indicator" style={indicatorStyle} />
+                {links.map((l) => (
+                  <Link
+                    key={l.href}
+                    href={l.href}
+                    ref={(el) => {
+                      linkRefs.current[l.href] = el;
+                    }}
+                    className={`nb-link ${isActive(l.href) ? "is-active" : "is-inactive"}`}
+                  >
+                    
+                    {l.label}
+                  </Link>
+                ))}
+              </div>
 
-            {/* Theme toggle + . */}
-            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-              <div
-                style={{
-                  width: 1,
-                  height: 24,
-                  background: "var(--border)",
-                }}
-              />
+              <div className="nb-divider" />
 
-              {/* Theme toggle button */}
               <button
+                className="nb-theme-btn"
                 onClick={toggleTheme}
                 title={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
-                style={{
-                  width: 40,
-                  height: 40,
-                  borderRadius: 10,
-                  border: "1px solid var(--border)",
-                  background: "var(--surface)",
-                  cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: 18,
-                  transition: "all 0.2s",
-                  color: "var(--text)",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = "rgba(66, 153, 225, 0.1)";
-                  e.currentTarget.style.borderColor = "rgba(66, 153, 225, 0.3)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = "var(--surface)";
-                  e.currentTarget.style.borderColor = "var(--border)";
-                }}
               >
                 {theme === "dark" ? "☀️" : "🌙"}
               </button>
             </div>
+
+            {/* ── Mobile Controls ── */}
+            <div className="nb-mobile-controls">
+              <button
+                className="nb-theme-btn"
+                onClick={toggleTheme}
+                title={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+              >
+                {theme === "dark" ? "☀️" : "🌙"}
+              </button>
+
+              <button
+                className="nb-burger"
+                onClick={() => setMobileMenuOpen((v) => !v)}
+                aria-label="Toggle menu"
+                aria-expanded={mobileMenuOpen}
+              >
+                <div
+                  className="nb-burger-line"
+                  style={{
+                    transform: mobileMenuOpen
+                      ? "rotate(45deg) translate(4.6px, 4.6px)"
+                      : "none",
+                  }}
+                />
+                <div
+                  className="nb-burger-line"
+                  style={{
+                    opacity: mobileMenuOpen ? 0 : 1,
+                    width: mobileMenuOpen ? "0px" : "17px",
+                  }}
+                />
+                <div
+                  className="nb-burger-line"
+                  style={{
+                    transform: mobileMenuOpen
+                      ? "rotate(-45deg) translate(4.6px, -4.6px)"
+                      : "none",
+                  }}
+                />
+              </button>
+            </div>
           </div>
 
-          {/* Mobile menu button + theme toggle. */}
-          <div
-            className="mobile-controls"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 8,
-            }}
-          >
-            {/* Theme toggle */}
-            <button
-              onClick={toggleTheme}
-              title={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
-              style={{
-                width: 40,
-                height: 40,
-                borderRadius: 10,
-                border: "1px solid var(--border)",
-                background: "var(--surface)",
-                cursor: "pointer",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontSize: 18,
-                transition: "all 0.2s",
-                color: "var(--text)",
-              }}
-            >
-              {theme === "dark" ? "☀️" : "🌙"}
-            </button>
-
-            {/* Hamburger menu. */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              style={{
-                width: 40,
-                height: 40,
-                borderRadius: 10,
-                border: "1px solid var(--border)",
-                background: mobileMenuOpen
-                  ? "rgba(66, 153, 225, 0.1)"
-                  : "var(--surface)",
-                cursor: "pointer",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: 5,
-                transition: "all 0.2s",
-                padding: 0,
-              }}
-            >
-              <div
-                style={{
-                  width: 20,
-                  height: 2,
-                  background: "var(--text)",
-                  borderRadius: 1,
-                  transition: "all 0.3s",
-                  transform: mobileMenuOpen
-                    ? "rotate(45deg) translateY(10px)"
-                    : "rotate(0)",
-                }}
-              />
-              <div
-                style={{
-                  width: 20,
-                  height: 2,
-                  background: "var(--text)",
-                  borderRadius: 1,
-                  transition: "all 0.3s",
-                  opacity: mobileMenuOpen ? 0 : 1,
-                }}
-              />
-              <div
-                style={{
-                  width: 20,
-                  height: 2,
-                  background: "var(--text)",
-                  borderRadius: 1,
-                  transition: "all 0.3s",
-                  transform: mobileMenuOpen
-                    ? "rotate(-45deg) translateY(-10px)"
-                    : "rotate(0)",
-                }}
-              />
-            </button>
-          </div>
+          {/* Scroll glow accent line */}
+          <div className="nb-glow" />
         </div>
 
-        {/* Mobile menu.. */}
+        {/* ── Mobile Drawer ── */}
         {mobileMenuOpen && (
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: 2,
-              padding: "12px",
-              borderTop: "1px solid var(--border)",
-              background: "var(--bg2)",
-              animation: "slideDown 0.3s ease",
-            }}
-          >
-            <style>{`
-              @keyframes slideDown {
-                from {
-                  opacity: 0;
-                  transform: translateY(-10px);
-                }
-                to {
-                  opacity: 1;
-                  transform: translateY(0);
-                }
-              }
-            `}</style>
-
-            {links.map((l) => (
+          <div className="nb-drawer">
+            {links.map((l, i) => (
               <Link
                 key={l.href}
                 href={l.href}
                 onClick={() => setMobileMenuOpen(false)}
-                style={{
-                  padding: "12px 14px",
-                  borderRadius: 10,
-                  fontSize: 14,
-                  fontWeight: 500,
-                  textDecoration: "none",
-                  color: isActive(l.href) ? "var(--blue)" : "var(--text)",
-                  background: isActive(l.href)
-                    ? "rgba(66, 153, 225, 0.1)"
-                    : "var(--surface)",
-                  border: `1px solid ${isActive(l.href) ? "rgba(66, 153, 225, 0.3)" : "var(--border)"}`,
-                  transition: "all 0.2s",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 10,
-                  cursor: "pointer",
-                }}
+                className={`nb-drawer-link ${isActive(l.href) ? "is-active" : "is-inactive"}`}
+                style={{ animationDelay: `${i * 0.04}s` }}
               >
-                <span style={{ fontSize: 18 }}>{l.icon}</span>
-                {l.label}
+                <div className="nb-drawer-icon">{l.icon}</div>
+                <span style={{ flex: 1 }}>{l.label}</span>
+                {isActive(l.href) && <div className="nb-drawer-dot" />}
               </Link>
             ))}
           </div>
         )}
-      </nav>
+      </div>
     </>
   );
 }

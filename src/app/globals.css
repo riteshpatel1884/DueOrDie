@@ -4,8 +4,6 @@
 
 /* ════════════════════════════════════════════════════════════════════════════
    DARK THEME (default)
-   Strict 2-color system: #111111 (black) ↔ #efefef (white).
-   Every token is a shade, opacity, or mix — no third hue.
 ════════════════════════════════════════════════════════════════════════════ */
 :root {
   /* ── Backgrounds ── */
@@ -37,7 +35,7 @@
   --hero-orb-a: rgba(239, 239, 239, 0.04);
   --hero-orb-b: rgba(239, 239, 239, 0.03);
 
-  /* ── How-It-Works step colors (step 1 = brightest → step 5 = dimmest) ── */
+  /* ── How-It-Works step colors ── */
   --step-1-color:  #efefef;
   --step-1-bg:     rgba(239, 239, 239, 0.07);
   --step-1-border: rgba(239, 239, 239, 0.16);
@@ -70,11 +68,10 @@
   --cta-grid-line: rgba(239, 239, 239, 0.025);
   --cta-glow:      rgba(239, 239, 239, 0.05);
 
-  /* ── Stat strip (home) ── */
+  /* ── Stat strip ── */
   --stat-value: #efefef;
 
   /* ── New Goal page ── */
-  /* Step dot */
   --stepdot-done-bg:     #efefef;
   --stepdot-done-border: #efefef;
   --stepdot-done-fg:     #111111;
@@ -82,51 +79,39 @@
   --stepdot-active-bord: #efefef;
   --stepdot-active-fg:   #111111;
 
-  /* Topic number bubble */
   --topic-num-bg:     rgba(239, 239, 239, 0.08);
   --topic-num-border: rgba(239, 239, 239, 0.20);
   --topic-num-fg:     #efefef;
 
-  /* Topic day badge (when days > 1) */
   --topic-days-bg:     rgba(239, 239, 239, 0.08);
   --topic-days-border: rgba(239, 239, 239, 0.20);
   --topic-days-fg:     #c8c8c8;
-  /* Topic day badge (days = 1, dimmer) */
   --topic-days-dim-bg:     transparent;
   --topic-days-dim-border: var(--border);
   --topic-days-dim-fg:     var(--text3);
 
-  /* Topic remove button hover */
   --topic-remove-hover-bg: rgba(239, 239, 239, 0.08);
   --topic-remove-hover-fg: #efefef;
 
-  /* Edit confirm button */
   --edit-confirm-bg: #efefef;
   --edit-confirm-fg: #111111;
 
-  /* Topic count badge */
   --topic-count-bg:     rgba(239, 239, 239, 0.07);
   --topic-count-border: rgba(239, 239, 239, 0.15);
   --topic-count-fg:     #c8c8c8;
 
-  /* Warning / over-deadline */
   --warn-bg:     rgba(239, 239, 239, 0.05);
   --warn-border: rgba(239, 239, 239, 0.18);
   --warn-fg:     #efefef;
 
-  /* Summary card — ok state */
   --summary-ok-bg:     rgba(239, 239, 239, 0.04);
   --summary-ok-border: rgba(239, 239, 239, 0.14);
-  --summary-ok-fg:     #c8c8c8;    /* "ok" value color */
+  --summary-ok-fg:     #c8c8c8;
 
-  /* Summary card — over state (reuses warn tokens) */
+  --stat-mini-val-ok:   #c8c8c8;
+  --stat-mini-val-warn: #efefef;
+  --stat-mini-val-b:    #888888;
 
-  /* Stat mini-cards inside deadline section */
-  --stat-mini-val-ok:   #c8c8c8;   /* topic days when fine */
-  --stat-mini-val-warn: #efefef;   /* topic days when over deadline */
-  --stat-mini-val-b:    #888888;   /* deadline days */
-
-  /* Mode toggle */
   --mode-active-bg:     rgba(239, 239, 239, 0.07);
   --mode-active-border: rgba(239, 239, 239, 0.25);
   --mode-active-fg:     #efefef;
@@ -134,19 +119,16 @@
   --mode-idle-border:   var(--border);
   --mode-idle-fg:       var(--text);
 
-  /* Suggestion card import badge */
   --import-badge-bg:     rgba(239, 239, 239, 0.08);
   --import-badge-fg:     #c8c8c8;
 
-  /* Imported library badge strip */
   --lib-badge-bg:     rgba(239, 239, 239, 0.06);
   --lib-badge-border: rgba(239, 239, 239, 0.15);
   --lib-badge-fg:     #c8c8c8;
 
-  /* Browse library pill buttons */
-  --lib-pill-bg:     rgba(239, 239, 239, 0.05);
-  --lib-pill-border: rgba(239, 239, 239, 0.14);
-  --lib-pill-fg:     #888888;
+  --lib-pill-bg:           rgba(239, 239, 239, 0.05);
+  --lib-pill-border:       rgba(239, 239, 239, 0.14);
+  --lib-pill-fg:           #888888;
   --lib-pill-hover-bg:     rgba(239, 239, 239, 0.10);
   --lib-pill-hover-border: rgba(239, 239, 239, 0.25);
   --lib-pill-hover-fg:     #efefef;
@@ -162,15 +144,99 @@
   --status-today-fg:   #efefef;
   --status-overdue-bg: rgba(239, 239, 239, 0.04);
   --status-overdue-fg: #777777;
+
+  /* ══ Today page ══════════════════════════════════════════════════════════ */
+
+  /* Header card */
+  --today-header-bg:     rgba(239, 239, 239, 0.04);
+  --today-header-border: rgba(239, 239, 239, 0.10);
+  --today-header-glow:   rgba(239, 239, 239, 0.04);
+  --today-day-label:     var(--text3);
+  --today-label:         var(--text2);
+
+  /* Progress bar */
+  --today-progress-track:  rgba(239, 239, 239, 0.07);
+  --today-progress-fill:   #efefef;
+  --today-progress-shadow: rgba(239, 239, 239, 0.15);
+  --today-progress-done-fill:   #efefef;
+  --today-progress-done-shadow: rgba(239, 239, 239, 0.20);
+
+  /* Topic cards */
+  --today-topic-bg:          var(--surface);
+  --today-topic-border:      var(--border);
+  --today-topic-hover-border: var(--border2);
+  --today-topic-done-bg:     rgba(239, 239, 239, 0.04);
+  --today-topic-done-border: rgba(239, 239, 239, 0.15);
+  --today-topic-done-text:   var(--text3);
+  --today-topic-done-label:  var(--text3);
+
+  /* Checkbox */
+  --today-check-border:      var(--border2);
+  --today-check-done-bg:     #efefef;
+  --today-check-done-border: #efefef;
+  --today-check-done-shadow: rgba(239, 239, 239, 0.15);
+
+  /* Submit button */
+  --today-submit-ready-bg:     #efefef;
+  --today-submit-ready-color:  #111111;
+  --today-submit-ready-shadow: rgba(239, 239, 239, 0.15);
+  --today-submit-ready-shadow-hover: rgba(239, 239, 239, 0.22);
+  --today-submit-idle-bg:      var(--surface);
+  --today-submit-idle-color:   var(--text3);
+
+  /* Already-logged notice */
+  --today-logged-ok-bg:     rgba(239, 239, 239, 0.05);
+  --today-logged-ok-border: rgba(239, 239, 239, 0.14);
+  --today-logged-ok-color:  var(--text2);
+  --today-logged-skip-bg:     rgba(239, 239, 239, 0.03);
+  --today-logged-skip-border: rgba(239, 239, 239, 0.10);
+  --today-logged-skip-color:  var(--text3);
+
+  /* Backlog pill / badge */
+  --today-backlog-pill-bg:     rgba(239, 239, 239, 0.06);
+  --today-backlog-pill-border: rgba(239, 239, 239, 0.18);
+  --today-backlog-pill-color:  var(--text2);
+  --today-backlog-dot-bg:      var(--text2);
+  --today-backlog-dot-color:   var(--bg);
+  --today-backlog-cleared-bg:     rgba(239, 239, 239, 0.06);
+  --today-backlog-cleared-border: rgba(239, 239, 239, 0.18);
+  --today-backlog-cleared-color:  var(--text2);
+
+  /* Backlog modal */
+  --today-modal-bg:            var(--surface);
+  --today-modal-border:        rgba(239, 239, 239, 0.10);
+  --today-modal-handle:        rgba(239, 239, 239, 0.10);
+  --today-modal-progress-track: rgba(239, 239, 239, 0.08);
+  --today-modal-progress-fill:  #efefef;
+  --today-modal-progress-done:  #efefef;
+  --today-modal-item-bg:        rgba(239, 239, 239, 0.03);
+  --today-modal-item-border:    rgba(239, 239, 239, 0.10);
+  --today-modal-item-done-bg:   rgba(239, 239, 239, 0.06);
+  --today-modal-item-done-border: rgba(239, 239, 239, 0.18);
+  --today-modal-check-border:   rgba(239, 239, 239, 0.25);
+  --today-modal-check-done-bg:  #efefef;
+  --today-modal-check-done-border: #efefef;
+  --today-modal-backlog-tag-bg:     rgba(239, 239, 239, 0.06);
+  --today-modal-backlog-tag-border: rgba(239, 239, 239, 0.15);
+  --today-modal-backlog-tag-color:  var(--text3);
+  --today-modal-cta-ready-bg:    #efefef;
+  --today-modal-cta-ready-color: #111111;
+  --today-modal-cta-ready-shadow: rgba(239, 239, 239, 0.12);
+  --today-modal-cta-idle-bg:     rgba(239, 239, 239, 0.05);
+  --today-modal-cta-idle-color:  var(--text3);
+  --today-modal-skip-color:      var(--text3);
+  --today-modal-skip-border:     rgba(239, 239, 239, 0.08);
+  --today-modal-text:            var(--text);
+  --today-modal-text2:           var(--text2);
+  --today-modal-text3:           var(--text3);
 }
 
 /* ════════════════════════════════════════════════════════════════════════════
    LIGHT THEME
-   Strict 2-color system: #f5f5f5 (white) ↔ #111111 (black).
 ════════════════════════════════════════════════════════════════════════════ */
 [data-theme="light"] {
   /* ── Backgrounds ── */
-  --bg:       #f5f5f5;
+  --bg:       #ffffff;
   --bg2:      #eeeeee;
   --bg3:      #e7e7e7;
 
@@ -289,9 +355,9 @@
   --lib-badge-border: rgba(17, 17, 17, 0.14);
   --lib-badge-fg:     #555555;
 
-  --lib-pill-bg:     rgba(17, 17, 17, 0.04);
-  --lib-pill-border: rgba(17, 17, 17, 0.12);
-  --lib-pill-fg:     #777777;
+  --lib-pill-bg:           rgba(17, 17, 17, 0.04);
+  --lib-pill-border:       rgba(17, 17, 17, 0.12);
+  --lib-pill-fg:           #777777;
   --lib-pill-hover-bg:     rgba(17, 17, 17, 0.09);
   --lib-pill-hover-border: rgba(17, 17, 17, 0.25);
   --lib-pill-hover-fg:     #111111;
@@ -307,6 +373,91 @@
   --status-today-fg:   #111111;
   --status-overdue-bg: rgba(17, 17, 17, 0.04);
   --status-overdue-fg: #777777;
+
+  /* ══ Today page ══════════════════════════════════════════════════════════ */
+
+  /* Header card */
+  --today-header-bg:     rgba(17, 17, 17, 0.03);
+  --today-header-border: rgba(17, 17, 17, 0.10);
+  --today-header-glow:   rgba(17, 17, 17, 0.03);
+  --today-day-label:     var(--text3);
+  --today-label:         var(--text2);
+
+  /* Progress bar */
+  --today-progress-track:       rgba(17, 17, 17, 0.07);
+  --today-progress-fill:        #111111;
+  --today-progress-shadow:      rgba(17, 17, 17, 0.12);
+  --today-progress-done-fill:   #111111;
+  --today-progress-done-shadow: rgba(17, 17, 17, 0.15);
+
+  /* Topic cards */
+  --today-topic-bg:           var(--surface);
+  --today-topic-border:       var(--border);
+  --today-topic-hover-border: var(--border2);
+  --today-topic-done-bg:      rgba(17, 17, 17, 0.03);
+  --today-topic-done-border:  rgba(17, 17, 17, 0.12);
+  --today-topic-done-text:    var(--text3);
+  --today-topic-done-label:   var(--text3);
+
+  /* Checkbox */
+  --today-check-border:       var(--border2);
+  --today-check-done-bg:      #111111;
+  --today-check-done-border:  #111111;
+  --today-check-done-shadow:  rgba(17, 17, 17, 0.12);
+
+  /* Submit button */
+  --today-submit-ready-bg:          #111111;
+  --today-submit-ready-color:       #ffffff;
+  --today-submit-ready-shadow:      rgba(17, 17, 17, 0.15);
+  --today-submit-ready-shadow-hover: rgba(17, 17, 17, 0.22);
+  --today-submit-idle-bg:           var(--surface);
+  --today-submit-idle-color:        var(--text3);
+
+  /* Already-logged notice */
+  --today-logged-ok-bg:     rgba(17, 17, 17, 0.04);
+  --today-logged-ok-border: rgba(17, 17, 17, 0.12);
+  --today-logged-ok-color:  var(--text2);
+  --today-logged-skip-bg:     rgba(17, 17, 17, 0.03);
+  --today-logged-skip-border: rgba(17, 17, 17, 0.09);
+  --today-logged-skip-color:  var(--text3);
+
+  /* Backlog pill / badge */
+  --today-backlog-pill-bg:     rgba(17, 17, 17, 0.05);
+  --today-backlog-pill-border: rgba(17, 17, 17, 0.16);
+  --today-backlog-pill-color:  var(--text2);
+  --today-backlog-dot-bg:      var(--text2);
+  --today-backlog-dot-color:   var(--bg);
+  --today-backlog-cleared-bg:     rgba(17, 17, 17, 0.05);
+  --today-backlog-cleared-border: rgba(17, 17, 17, 0.14);
+  --today-backlog-cleared-color:  var(--text2);
+
+  /* Backlog modal */
+  --today-modal-bg:             var(--surface);
+  --today-modal-border:         rgba(17, 17, 17, 0.10);
+  --today-modal-handle:         rgba(17, 17, 17, 0.10);
+  --today-modal-progress-track: rgba(17, 17, 17, 0.07);
+  --today-modal-progress-fill:  #111111;
+  --today-modal-progress-done:  #111111;
+  --today-modal-item-bg:        rgba(17, 17, 17, 0.02);
+  --today-modal-item-border:    rgba(17, 17, 17, 0.09);
+  --today-modal-item-done-bg:   rgba(17, 17, 17, 0.05);
+  --today-modal-item-done-border: rgba(17, 17, 17, 0.16);
+  --today-modal-check-border:   rgba(17, 17, 17, 0.25);
+  --today-modal-check-done-bg:  #111111;
+  --today-modal-check-done-border: #111111;
+  --today-modal-backlog-tag-bg:     rgba(17, 17, 17, 0.05);
+  --today-modal-backlog-tag-border: rgba(17, 17, 17, 0.14);
+  --today-modal-backlog-tag-color:  var(--text3);
+  --today-modal-cta-ready-bg:    #111111;
+  --today-modal-cta-ready-color: #ffffff;
+  --today-modal-cta-ready-shadow: rgba(17, 17, 17, 0.12);
+  --today-modal-cta-idle-bg:     rgba(17, 17, 17, 0.04);
+  --today-modal-cta-idle-color:  var(--text3);
+  --today-modal-skip-color:      var(--text3);
+  --today-modal-skip-border:     rgba(17, 17, 17, 0.10);
+  --today-modal-text:            var(--text);
+  --today-modal-text2:           var(--text2);
+  --today-modal-text3:           var(--text3);
 }
 
 /* ════════════════════════════════════════════════════════════════════════════
@@ -484,7 +635,7 @@ body {
    NAVBAR
 ════════════════════════════════════════════════════════════════════════════ */
 .navbar {
-  background: var(--bg2);
+  background: var(--bg);
   border-bottom: 1px solid var(--border);
 }
 .navbar .nav-link {

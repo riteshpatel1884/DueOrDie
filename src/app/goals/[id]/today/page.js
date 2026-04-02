@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams, useRouter } from "next/navigation";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useGoals, buildSchedule, todayStr } from "@/app/hooks/useGoals";
 
@@ -30,21 +30,15 @@ function BacklogModal({ backlogTopics, onClose, onComplete }) {
         @keyframes backdropIn { from { opacity: 0 } to { opacity: 1 } }
         @keyframes sheetUp {
           from { opacity: 0; transform: translateY(40px) scale(0.97); }
-          to   { opacity: 1; transform: translateY(0)   scale(1); }
+          to   { opacity: 1; transform: translateY(0) scale(1); }
         }
         @keyframes sheetOut {
-          from { opacity: 1; transform: translateY(0)   scale(1); }
+          from { opacity: 1; transform: translateY(0) scale(1); }
           to   { opacity: 0; transform: translateY(40px) scale(0.97); }
         }
-        .backlog-sheet {
-          animation: sheetUp 0.35s cubic-bezier(.22,1,.36,1) forwards;
-        }
-        .backlog-sheet.out {
-          animation: sheetOut 0.3s ease forwards;
-        }
-        .backlog-item {
-          transition: all 0.2s cubic-bezier(.22,1,.36,1);
-        }
+        .backlog-sheet { animation: sheetUp 0.35s cubic-bezier(.22,1,.36,1) forwards; }
+        .backlog-sheet.out { animation: sheetOut 0.3s ease forwards; }
+        .backlog-item { transition: all 0.2s cubic-bezier(.22,1,.36,1); }
         .backlog-item:hover { transform: translateX(3px); }
       `}</style>
 
@@ -54,7 +48,7 @@ function BacklogModal({ backlogTopics, onClose, onComplete }) {
         style={{
           position: "fixed",
           inset: 0,
-          background: "rgba(0,0,0,0.6)",
+          background: "rgba(0,0,0,0.55)",
           backdropFilter: "blur(6px)",
           zIndex: 900,
           animation: "backdropIn 0.25s ease",
@@ -71,13 +65,12 @@ function BacklogModal({ backlogTopics, onClose, onComplete }) {
           right: 0,
           maxWidth: 620,
           margin: "0 auto",
-          background:
-            "linear-gradient(160deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%)",
+          background: "var(--today-modal-bg)",
           borderRadius: "24px 24px 0 0",
           padding: "0 0 32px",
           zIndex: 1000,
-          boxShadow: "0 -16px 60px rgba(0,0,0,0.5)",
-          border: "1px solid rgba(255,100,100,0.15)",
+          boxShadow: "0 -16px 60px rgba(0,0,0,0.3)",
+          border: "1px solid var(--today-modal-border)",
           borderBottom: "none",
           maxHeight: "80vh",
           display: "flex",
@@ -97,7 +90,7 @@ function BacklogModal({ backlogTopics, onClose, onComplete }) {
               width: 40,
               height: 4,
               borderRadius: 99,
-              background: "rgba(255,255,255,0.15)",
+              background: "var(--today-modal-handle)",
             }}
           />
         </div>
@@ -125,8 +118,8 @@ function BacklogModal({ backlogTopics, onClose, onComplete }) {
                   width: 28,
                   height: 28,
                   borderRadius: 8,
-                  background: "rgba(255,77,77,0.2)",
-                  border: "1px solid rgba(255,77,77,0.4)",
+                  background: "var(--accent-subtle)",
+                  border: "1px solid var(--accent-border)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -140,7 +133,7 @@ function BacklogModal({ backlogTopics, onClose, onComplete }) {
                   fontFamily: "Syne, sans-serif",
                   fontWeight: 800,
                   fontSize: 18,
-                  color: "#fff",
+                  color: "var(--today-modal-text)",
                 }}
               >
                 Backlog Pending
@@ -149,7 +142,7 @@ function BacklogModal({ backlogTopics, onClose, onComplete }) {
             <p
               style={{
                 fontSize: 12,
-                color: "rgba(255,255,255,0.45)",
+                color: "var(--today-modal-text3)",
                 marginLeft: 36,
               }}
             >
@@ -162,9 +155,9 @@ function BacklogModal({ backlogTopics, onClose, onComplete }) {
               width: 32,
               height: 32,
               borderRadius: 99,
-              border: "1px solid rgba(255,255,255,0.1)",
-              background: "rgba(255,255,255,0.05)",
-              color: "rgba(255,255,255,0.5)",
+              border: "1px solid var(--border)",
+              background: "var(--surface2)",
+              color: "var(--today-modal-text3)",
               cursor: "pointer",
               fontSize: 16,
               display: "flex",
@@ -173,12 +166,12 @@ function BacklogModal({ backlogTopics, onClose, onComplete }) {
               transition: "all 0.15s",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = "rgba(255,255,255,0.12)";
-              e.currentTarget.style.color = "#fff";
+              e.currentTarget.style.background = "var(--bg3)";
+              e.currentTarget.style.color = "var(--today-modal-text)";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = "rgba(255,255,255,0.05)";
-              e.currentTarget.style.color = "rgba(255,255,255,0.5)";
+              e.currentTarget.style.background = "var(--surface2)";
+              e.currentTarget.style.color = "var(--today-modal-text3)";
             }}
           >
             ×
@@ -192,7 +185,7 @@ function BacklogModal({ backlogTopics, onClose, onComplete }) {
               display: "flex",
               justifyContent: "space-between",
               fontSize: 11,
-              color: "rgba(255,255,255,0.4)",
+              color: "var(--today-modal-text3)",
               marginBottom: 6,
               fontFamily: "Space Mono, monospace",
             }}
@@ -208,7 +201,7 @@ function BacklogModal({ backlogTopics, onClose, onComplete }) {
             style={{
               height: 4,
               borderRadius: 99,
-              background: "rgba(255,255,255,0.08)",
+              background: "var(--today-modal-progress-track)",
               overflow: "hidden",
             }}
           >
@@ -218,13 +211,9 @@ function BacklogModal({ backlogTopics, onClose, onComplete }) {
                 borderRadius: 99,
                 width: `${(completedCount / backlogTopics.length) * 100}%`,
                 background: allDone
-                  ? "linear-gradient(90deg, #06d6a0, #0acf83)"
-                  : "linear-gradient(90deg, #ff4d4d, #ff8c42)",
-                transition:
-                  "width 0.4s cubic-bezier(.22,1,.36,1), background 0.4s ease",
-                boxShadow: allDone
-                  ? "0 0 12px rgba(6,214,160,0.4)"
-                  : "0 0 12px rgba(255,77,77,0.3)",
+                  ? "var(--today-modal-progress-done)"
+                  : "var(--today-modal-progress-fill)",
+                transition: "width 0.4s cubic-bezier(.22,1,.36,1)",
               }}
             />
           </div>
@@ -237,7 +226,6 @@ function BacklogModal({ backlogTopics, onClose, onComplete }) {
             padding: "14px 24px 0",
             flex: 1,
             scrollbarWidth: "thin",
-            scrollbarColor: "rgba(255,255,255,0.1) transparent",
           }}
         >
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -254,10 +242,10 @@ function BacklogModal({ backlogTopics, onClose, onComplete }) {
                     gap: 14,
                     padding: "13px 16px",
                     borderRadius: 12,
-                    border: `1px solid ${done ? "rgba(6,214,160,0.3)" : "rgba(255,77,77,0.15)"}`,
+                    border: `1px solid ${done ? "var(--today-modal-item-done-border)" : "var(--today-modal-item-border)"}`,
                     background: done
-                      ? "rgba(6,214,160,0.07)"
-                      : "rgba(255,255,255,0.03)",
+                      ? "var(--today-modal-item-done-bg)"
+                      : "var(--today-modal-item-bg)",
                     cursor: "pointer",
                     userSelect: "none",
                   }}
@@ -269,20 +257,21 @@ function BacklogModal({ backlogTopics, onClose, onComplete }) {
                       height: 22,
                       borderRadius: 6,
                       flexShrink: 0,
-                      border: `2px solid ${done ? "#06d6a0" : "rgba(255,77,77,0.5)"}`,
-                      background: done ? "#06d6a0" : "transparent",
+                      border: `2px solid ${done ? "var(--today-modal-check-done-border)" : "var(--today-modal-check-border)"}`,
+                      background: done
+                        ? "var(--today-modal-check-done-bg)"
+                        : "transparent",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
                       transition: "all 0.2s",
-                      boxShadow: done ? "0 0 10px rgba(6,214,160,0.3)" : "none",
                     }}
                   >
                     {done && (
                       <svg width="12" height="9" viewBox="0 0 12 9" fill="none">
                         <path
                           d="M1 4L4.5 7.5L11 1"
-                          stroke="white"
+                          stroke="var(--today-modal-cta-ready-color)"
                           strokeWidth="2"
                           strokeLinecap="round"
                           strokeLinejoin="round"
@@ -295,8 +284,8 @@ function BacklogModal({ backlogTopics, onClose, onComplete }) {
                       flex: 1,
                       fontSize: 14,
                       color: done
-                        ? "rgba(255,255,255,0.35)"
-                        : "rgba(255,255,255,0.85)",
+                        ? "var(--today-modal-text3)"
+                        : "var(--today-modal-text)",
                       textDecoration: done ? "line-through" : "none",
                       transition: "all 0.2s",
                       fontFamily: "DM Sans, sans-serif",
@@ -309,9 +298,9 @@ function BacklogModal({ backlogTopics, onClose, onComplete }) {
                       fontSize: 10,
                       padding: "2px 8px",
                       borderRadius: 99,
-                      background: "rgba(255,77,77,0.12)",
-                      border: "1px solid rgba(255,77,77,0.2)",
-                      color: "rgba(255,120,120,0.9)",
+                      background: "var(--today-modal-backlog-tag-bg)",
+                      border: "1px solid var(--today-modal-backlog-tag-border)",
+                      color: "var(--today-modal-backlog-tag-color)",
                       fontFamily: "Space Mono, monospace",
                       flexShrink: 0,
                     }}
@@ -342,15 +331,19 @@ function BacklogModal({ backlogTopics, onClose, onComplete }) {
               borderRadius: 14,
               border: "none",
               background: allDone
-                ? "linear-gradient(135deg, #06d6a0 0%, #0acf83 100%)"
-                : "rgba(255,255,255,0.06)",
-              color: allDone ? "white" : "rgba(255,255,255,0.3)",
+                ? "var(--today-modal-cta-ready-bg)"
+                : "var(--today-modal-cta-idle-bg)",
+              color: allDone
+                ? "var(--today-modal-cta-ready-color)"
+                : "var(--today-modal-cta-idle-color)",
               fontSize: 15,
               fontWeight: 700,
               fontFamily: "Syne, sans-serif",
               cursor: allDone ? "pointer" : "not-allowed",
               transition: "all 0.25s",
-              boxShadow: allDone ? "0 4px 24px rgba(6,214,160,0.3)" : "none",
+              boxShadow: allDone
+                ? `0 4px 24px var(--today-modal-cta-ready-shadow)`
+                : "none",
               letterSpacing: "-0.2px",
             }}
           >
@@ -366,19 +359,20 @@ function BacklogModal({ backlogTopics, onClose, onComplete }) {
               borderRadius: 12,
               fontSize: 13,
               background: "transparent",
-              border: "1px solid rgba(255,255,255,0.08)",
-              color: "rgba(255,255,255,0.35)",
+              border: "1px solid var(--today-modal-skip-border)",
+              color: "var(--today-modal-skip-color)",
               cursor: "pointer",
               fontFamily: "DM Sans, sans-serif",
               transition: "all 0.15s",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.color = "rgba(255,255,255,0.6)";
-              e.currentTarget.style.borderColor = "rgba(255,255,255,0.2)";
+              e.currentTarget.style.color = "var(--today-modal-text2)";
+              e.currentTarget.style.borderColor = "var(--border)";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.color = "rgba(255,255,255,0.35)";
-              e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)";
+              e.currentTarget.style.color = "var(--today-modal-skip-color)";
+              e.currentTarget.style.borderColor =
+                "var(--today-modal-skip-border)";
             }}
           >
             Remind me later
@@ -472,9 +466,8 @@ export default function TodayPage() {
     );
   }
 
-  // Only today's proper topics — NO auto-merged backlog
   const todayTopics = [...todayPlan.topics];
-  const backlogTopics = todayPlan.extra || []; // kept separate
+  const backlogTopics = todayPlan.extra || [];
   const hasBacklog = backlogTopics.length > 0;
 
   const checkedCount = Object.values(checked).filter(Boolean).length;
@@ -502,7 +495,6 @@ export default function TodayPage() {
   };
 
   const handleBacklogComplete = (completed, remaining) => {
-    // remaining topics go back to backlog (persisted via logDay or separate mechanism)
     setClearedBacklogTopics(completed);
     setBacklogCleared(true);
   };
@@ -517,11 +509,7 @@ export default function TodayPage() {
       ...clearedBacklogTopics,
     ];
     const skippedTopics = todayTopics.filter((t) => !checked[t]);
-    logDay(id, today, {
-      completed: allDone,
-      completedTopics,
-      skippedTopics,
-    });
+    logDay(id, today, { completed: allDone, completedTopics, skippedTopics });
     setSubmitted(true);
   };
 
@@ -533,6 +521,7 @@ export default function TodayPage() {
     });
 
   const dayIndex = plan.findIndex((d) => d.date === today) + 1;
+  const progressPct = totalCount > 0 ? (checkedCount / totalCount) * 100 : 0;
 
   return (
     <>
@@ -541,42 +530,23 @@ export default function TodayPage() {
           from { opacity: 0; transform: translateY(12px); }
           to   { opacity: 1; transform: translateY(0); }
         }
-        @keyframes pulse-glow {
-          0%, 100% { box-shadow: 0 0 0 0 rgba(255,77,77,0.4); }
-          50%       { box-shadow: 0 0 0 8px rgba(255,77,77,0); }
+        @keyframes backlog-pulse {
+          0%, 100% { box-shadow: 0 0 0 0 var(--accent-subtle); }
+          50%       { box-shadow: 0 0 0 8px transparent; }
         }
-        @keyframes shimmer {
-          0%   { background-position: -200% center; }
-          100% { background-position: 200% center; }
-        }
-        .topic-card {
-          transition: all 0.2s cubic-bezier(.22,1,.36,1);
-        }
+        .topic-card { transition: all 0.2s cubic-bezier(.22,1,.36,1); }
         .topic-card:hover:not(.locked) {
           transform: translateX(4px);
-          border-color: rgba(74,158,255,0.4) !important;
-        }
-        .topic-card.done:hover {
-          transform: translateX(4px);
-          border-color: rgba(6,214,160,0.4) !important;
-        }
-        .backlog-pill {
-          animation: pulse-glow 2s ease-in-out infinite;
-        }
-        .submit-btn-ready {
-          background: linear-gradient(135deg, var(--accent) 0%, #ff6b35 100%) !important;
-          box-shadow: 0 6px 28px rgba(255,77,77,0.35) !important;
-        }
-        .submit-btn-ready:hover {
-          transform: translateY(-2px) !important;
-          box-shadow: 0 10px 36px rgba(255,77,77,0.45) !important;
+          border-color: var(--today-topic-hover-border) !important;
         }
         .backlog-fab {
-          animation: pulse-glow 2.5s ease-in-out infinite;
+          animation: backlog-pulse 2.5s ease-in-out infinite;
           transition: all 0.25s cubic-bezier(.22,1,.36,1) !important;
         }
-        .backlog-fab:hover {
-          transform: scale(1.06) !important;
+        .backlog-fab:hover { transform: scale(1.06) !important; }
+        .submit-btn-ready:hover {
+          transform: translateY(-2px) !important;
+          box-shadow: 0 10px 36px var(--today-submit-ready-shadow-hover) !important;
         }
       `}</style>
 
@@ -615,9 +585,8 @@ export default function TodayPage() {
         {/* Header card */}
         <div
           style={{
-            background:
-              "linear-gradient(135deg, rgba(74,158,255,0.08) 0%, rgba(74,158,255,0.02) 100%)",
-            border: "1px solid rgba(74,158,255,0.2)",
+            background: "var(--today-header-bg)",
+            border: "1px solid var(--today-header-border)",
             borderRadius: 20,
             padding: "24px",
             marginBottom: 24,
@@ -635,8 +604,7 @@ export default function TodayPage() {
               width: 140,
               height: 140,
               borderRadius: "50%",
-              background:
-                "radial-gradient(circle, rgba(74,158,255,0.12) 0%, transparent 70%)",
+              background: `radial-gradient(circle, var(--today-header-glow) 0%, transparent 70%)`,
               pointerEvents: "none",
             }}
           />
@@ -653,7 +621,7 @@ export default function TodayPage() {
               style={{
                 fontFamily: "Space Mono, monospace",
                 fontSize: 10,
-                color: "var(--text3)",
+                color: "var(--today-day-label)",
                 textTransform: "uppercase",
                 letterSpacing: "0.1em",
               }}
@@ -672,7 +640,7 @@ export default function TodayPage() {
               style={{
                 fontFamily: "Space Mono, monospace",
                 fontSize: 10,
-                color: "var(--blue)",
+                color: "var(--today-label)",
                 letterSpacing: "0.1em",
                 textTransform: "uppercase",
               }}
@@ -697,7 +665,7 @@ export default function TodayPage() {
             {formatDate(today)}
           </p>
 
-          {/* Backlog badge — prominent if present */}
+          {/* Backlog badge */}
           {hasBacklog && !backlogCleared && (
             <button
               className="backlog-fab"
@@ -709,9 +677,9 @@ export default function TodayPage() {
                 gap: 8,
                 padding: "9px 16px",
                 borderRadius: 100,
-                border: "1px solid rgba(255,77,77,0.4)",
-                background: "rgba(255,77,77,0.1)",
-                color: "var(--accent)",
+                border: "1px solid var(--today-backlog-pill-border)",
+                background: "var(--today-backlog-pill-bg)",
+                color: "var(--today-backlog-pill-color)",
                 cursor: "pointer",
                 fontSize: 13,
                 fontWeight: 600,
@@ -723,8 +691,8 @@ export default function TodayPage() {
                   width: 18,
                   height: 18,
                   borderRadius: "50%",
-                  background: "var(--accent)",
-                  color: "white",
+                  background: "var(--today-backlog-dot-bg)",
+                  color: "var(--today-backlog-dot-color)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -748,9 +716,9 @@ export default function TodayPage() {
                 gap: 7,
                 padding: "8px 14px",
                 borderRadius: 100,
-                border: "1px solid rgba(6,214,160,0.3)",
-                background: "rgba(6,214,160,0.07)",
-                color: "var(--green)",
+                border: "1px solid var(--today-backlog-cleared-border)",
+                background: "var(--today-backlog-cleared-bg)",
+                color: "var(--today-backlog-cleared-color)",
                 fontSize: 12,
                 fontWeight: 600,
               }}
@@ -765,14 +733,16 @@ export default function TodayPage() {
           <div
             style={{
               background: existingLog.completed
-                ? "rgba(6,214,160,0.07)"
-                : "rgba(255,209,102,0.07)",
-              border: `1px solid ${existingLog.completed ? "rgba(6,214,160,0.2)" : "rgba(255,209,102,0.2)"}`,
+                ? "var(--today-logged-ok-bg)"
+                : "var(--today-logged-skip-bg)",
+              border: `1px solid ${existingLog.completed ? "var(--today-logged-ok-border)" : "var(--today-logged-skip-border)"}`,
               borderRadius: 14,
               padding: "14px 18px",
               marginBottom: 20,
               fontSize: 13,
-              color: existingLog.completed ? "var(--green)" : "var(--accent3)",
+              color: existingLog.completed
+                ? "var(--today-logged-ok-color)"
+                : "var(--today-logged-skip-color)",
               animation: "fadeUp 0.4s ease 0.1s both",
             }}
           >
@@ -821,8 +791,8 @@ export default function TodayPage() {
                   transition: "all 0.15s",
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = "var(--blue)";
-                  e.currentTarget.style.color = "var(--blue)";
+                  e.currentTarget.style.borderColor = "var(--border2)";
+                  e.currentTarget.style.color = "var(--text)";
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.borderColor = "var(--border)";
@@ -844,8 +814,8 @@ export default function TodayPage() {
                   transition: "all 0.15s",
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = "var(--accent)";
-                  e.currentTarget.style.color = "var(--accent)";
+                  e.currentTarget.style.borderColor = "var(--border2)";
+                  e.currentTarget.style.color = "var(--text)";
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.borderColor = "var(--border)";
@@ -866,7 +836,7 @@ export default function TodayPage() {
             style={{
               height: 5,
               borderRadius: 99,
-              background: "var(--surface2)",
+              background: "var(--today-progress-track)",
               overflow: "hidden",
             }}
           >
@@ -874,15 +844,15 @@ export default function TodayPage() {
               style={{
                 height: "100%",
                 borderRadius: 99,
-                width: `${totalCount > 0 ? (checkedCount / totalCount) * 100 : 0}%`,
+                width: `${progressPct}%`,
                 background: allDone
-                  ? "linear-gradient(90deg, #06d6a0, #0acf83)"
-                  : "linear-gradient(90deg, var(--blue), #5b9fff)",
+                  ? "var(--today-progress-done-fill)"
+                  : "var(--today-progress-fill)",
+                boxShadow: allDone
+                  ? `0 0 10px var(--today-progress-done-shadow)`
+                  : `0 0 8px var(--today-progress-shadow)`,
                 transition:
                   "width 0.4s cubic-bezier(.22,1,.36,1), background 0.4s ease",
-                boxShadow: allDone
-                  ? "0 0 10px rgba(6,214,160,0.4)"
-                  : "0 0 8px rgba(74,158,255,0.3)",
               }}
             />
           </div>
@@ -910,10 +880,10 @@ export default function TodayPage() {
                   gap: 14,
                   padding: "15px 18px",
                   borderRadius: 14,
-                  border: `1px solid ${isDone ? "rgba(6,214,160,0.25)" : "var(--border)"}`,
+                  border: `1px solid ${isDone ? "var(--today-topic-done-border)" : "var(--today-topic-border)"}`,
                   background: isDone
-                    ? "rgba(6,214,160,0.05)"
-                    : "var(--surface)",
+                    ? "var(--today-topic-done-bg)"
+                    : "var(--today-topic-bg)",
                   cursor: alreadyLogged ? "default" : "pointer",
                   userSelect: "none",
                   animation: `fadeUp 0.35s ease ${0.25 + i * 0.04}s both`,
@@ -925,22 +895,38 @@ export default function TodayPage() {
                     height: 22,
                     borderRadius: 6,
                     flexShrink: 0,
-                    border: `2px solid ${isDone ? "var(--green)" : "var(--border2)"}`,
-                    background: isDone ? "var(--green)" : "transparent",
+                    border: `2px solid ${isDone ? "var(--today-check-done-border)" : "var(--today-check-border)"}`,
+                    background: isDone
+                      ? "var(--today-check-done-bg)"
+                      : "transparent",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
                     transition: "all 0.2s",
-                    boxShadow: isDone ? "0 0 10px rgba(6,214,160,0.3)" : "none",
+                    boxShadow: isDone
+                      ? `0 0 10px var(--today-check-done-shadow)`
+                      : "none",
                   }}
-                 >
-                  
+                >
+                  {isDone && (
+                    <svg width="12" height="9" viewBox="0 0 12 9" fill="none">
+                      <path
+                        d="M1 4L4.5 7.5L11 1"
+                        stroke="var(--today-submit-ready-color)"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  )}
                 </div>
                 <span
                   style={{
                     flex: 1,
                     fontSize: 14,
-                    color: isDone ? "var(--text3)" : "var(--text)",
+                    color: isDone
+                      ? "var(--today-topic-done-text)"
+                      : "var(--text)",
                     textDecoration: isDone ? "line-through" : "none",
                     transition: "all 0.2s",
                     fontFamily: "DM Sans, sans-serif",
@@ -954,8 +940,7 @@ export default function TodayPage() {
                     style={{
                       fontSize: 10,
                       fontFamily: "Space Mono, monospace",
-                      color: "var(--green)",
-                      opacity: 0.6,
+                      color: "var(--today-topic-done-label)",
                     }}
                   >
                     done
@@ -979,8 +964,13 @@ export default function TodayPage() {
                 borderRadius: 14,
                 border: "none",
                 background:
-                  checkedCount === 0 ? "var(--surface)" : "var(--accent)",
-                color: checkedCount === 0 ? "var(--text3)" : "white",
+                  checkedCount === 0
+                    ? "var(--today-submit-idle-bg)"
+                    : "var(--today-submit-ready-bg)",
+                color:
+                  checkedCount === 0
+                    ? "var(--today-submit-idle-color)"
+                    : "var(--today-submit-ready-color)",
                 fontSize: 15,
                 fontWeight: 700,
                 fontFamily: "Syne, sans-serif",
@@ -991,6 +981,10 @@ export default function TodayPage() {
                 alignItems: "center",
                 justifyContent: "center",
                 gap: 8,
+                boxShadow:
+                  checkedCount > 0
+                    ? `0 6px 28px var(--today-submit-ready-shadow)`
+                    : "none",
               }}
             >
               {hasBacklog && !backlogCleared ? (

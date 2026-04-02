@@ -5,7 +5,7 @@ export const TOPIC_LIBRARY = [
   {
     id: "ml",
     title: "Machine Learning",
-    emoji: "🤖",
+    
     keywords: [
       "ml",
       "machine learning",
@@ -43,7 +43,7 @@ export const TOPIC_LIBRARY = [
   {
     id: "dl",
     title: "Deep Learning",
-    emoji: "🧠",
+   
     keywords: [
       "deep learning",
       "deep",
@@ -77,7 +77,7 @@ export const TOPIC_LIBRARY = [
   {
     id: "dsa",
     title: "Data Structures & Algorithms",
-    emoji: "⚡",
+   
     keywords: [
       "dsa",
       "data structure",
@@ -118,7 +118,7 @@ export const TOPIC_LIBRARY = [
   {
     id: "webdev",
     title: "Web Development",
-    emoji: "🌐",
+    
     keywords: [
       "web",
       "webdev",
@@ -161,7 +161,7 @@ export const TOPIC_LIBRARY = [
   {
     id: "devops",
     title: "DevOps & Cloud",
-    emoji: "☁️",
+    
     keywords: [
       "devops",
       "cloud",
@@ -199,7 +199,7 @@ export const TOPIC_LIBRARY = [
   {
     id: "system-design",
     title: "System Design",
-    emoji: "🏗️",
+   
     keywords: [
       "system design",
       "system",
@@ -236,7 +236,7 @@ export const TOPIC_LIBRARY = [
   {
     id: "dbms",
     title: "Database Management",
-    emoji: "🗄️",
+   
     keywords: [
       "database",
       "dbms",
@@ -267,7 +267,7 @@ export const TOPIC_LIBRARY = [
   {
     id: "os",
     title: "Operating Systems",
-    emoji: "💻",
+    
     keywords: [
       "os",
       "operating system",
@@ -293,7 +293,7 @@ export const TOPIC_LIBRARY = [
   {
     id: "cn",
     title: "Computer Networks",
-    emoji: "🌍",
+  
     keywords: [
       "networking",
       "networks",
@@ -325,7 +325,7 @@ export const TOPIC_LIBRARY = [
   {
     id: "nlp",
     title: "Natural Language Processing",
-    emoji: "💬",
+   
     keywords: [
       "nlp",
       "natural language",
@@ -355,7 +355,7 @@ export const TOPIC_LIBRARY = [
   {
     id: "cybersec",
     title: "Cybersecurity",
-    emoji: "🔐",
+   
     keywords: [
       "security",
       "cybersecurity",
@@ -384,7 +384,7 @@ export const TOPIC_LIBRARY = [
   {
     id: "dsa-cp",
     title: "Competitive Programming",
-    emoji: "🏆",
+    
     keywords: [
       "competitive programming",
       "cp",
@@ -413,7 +413,7 @@ export const TOPIC_LIBRARY = [
   {
     id: "react",
     title: "React.js",
-    emoji: "⚛️",
+ 
     keywords: ["react", "reactjs", "react.js", "jsx", "hooks"],
     color: "#38bdf8",
     topics: [
@@ -435,7 +435,7 @@ export const TOPIC_LIBRARY = [
   {
     id: "python",
     title: "Python",
-    emoji: "🐍",
+    
     keywords: ["python", "py", "django", "flask", "fastapi"],
     color: "#fbbf24",
     topics: [
@@ -456,7 +456,7 @@ export const TOPIC_LIBRARY = [
   {
     id: "java",
     title: "Java",
-    emoji: "☕",
+   
     keywords: ["java", "jvm", "spring", "spring boot", "maven", "gradle"],
     color: "#f97316",
     topics: [
@@ -477,7 +477,7 @@ export const TOPIC_LIBRARY = [
   {
     id: "blockchain",
     title: "Blockchain & Web3",
-    emoji: "⛓️",
+   
     keywords: [
       "blockchain",
       "web3",
@@ -506,7 +506,7 @@ export const TOPIC_LIBRARY = [
   {
     id: "data-science",
     title: "Data Science",
-    emoji: "📊",
+   
     keywords: [
       "data science",
       "data analysis",

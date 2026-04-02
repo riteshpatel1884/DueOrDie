@@ -329,7 +329,6 @@ export default function NewGoalPage() {
 
   const [title, setTitle] = useState("");
   const [deadlineDays, setDeadlineDays] = useState(30);
-  const [mode, setMode] = useState("normal");
   const [topicInput, setTopicInput] = useState("");
   const [topicDays, setTopicDays] = useState(1);
   const [topics, setTopics] = useState([]);
@@ -445,7 +444,6 @@ export default function NewGoalPage() {
       title: title.trim(),
       topics,
       deadlineDays: Number(deadlineDays),
-      mode,
     });
     router.push(`/goals/${goal.id}`);
   };
@@ -1019,7 +1017,7 @@ export default function NewGoalPage() {
               )}
             </div>
 
-            {/* ── SECTION 3: Deadline & Mode ── */}
+            {/* ── SECTION 3: Deadline ── */}
             <div
               style={{
                 background: "var(--surface)",
@@ -1058,7 +1056,7 @@ export default function NewGoalPage() {
                     color: "var(--text)",
                   }}
                 >
-                  Deadline & Mode
+                  Deadline
                 </span>
                 <span
                   style={{
@@ -1217,7 +1215,6 @@ export default function NewGoalPage() {
                   style={{
                     padding: "10px 14px",
                     borderRadius: 8,
-                    marginBottom: 20,
                     background: "var(--warn-bg)",
                     border: "1px solid var(--warn-border)",
                     fontSize: 13,
@@ -1235,87 +1232,6 @@ export default function NewGoalPage() {
                   </span>
                 </div>
               )}
-
-              {/* Mode toggle */}
-              <label
-                style={{
-                  fontSize: 12,
-                  fontWeight: 600,
-                  color: "var(--text3)",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.06em",
-                  display: "block",
-                  marginBottom: 10,
-                }}
-              >
-                Backlog Mode
-              </label>
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "1fr 1fr",
-                  gap: 10,
-                }}
-              >
-                {[
-                  {
-                    value: "normal",
-                    label: "Normal Mode",
-                    desc: "Backlog spreads over next 3 days. Manageable pressure.",
-                    icon: "⚖️",
-                  },
-                  {
-                    value: "hard",
-                    label: "Hard Mode",
-                    desc: "All backlog hits tomorrow. Maximum accountability.",
-                    icon: "💀",
-                  },
-                ].map((m) => (
-                  <button
-                    key={m.value}
-                    onClick={() => setMode(m.value)}
-                    style={{
-                      padding: "14px 16px",
-                      borderRadius: 12,
-                      cursor: "pointer",
-                      textAlign: "left",
-                      transition: "all 0.2s",
-                      border: `2px solid ${mode === m.value ? "var(--mode-active-border)" : "var(--mode-idle-border)"}`,
-                      background:
-                        mode === m.value
-                          ? "var(--mode-active-bg)"
-                          : "var(--mode-idle-bg)",
-                    }}
-                  >
-                    <div style={{ fontSize: 22, marginBottom: 6 }}>
-                      {m.icon}
-                    </div>
-                    <div
-                      style={{
-                        fontFamily: "Syne, sans-serif",
-                        fontWeight: 700,
-                        fontSize: 14,
-                        marginBottom: 4,
-                        color:
-                          mode === m.value
-                            ? "var(--mode-active-fg)"
-                            : "var(--mode-idle-fg)",
-                      }}
-                    >
-                      {m.label}
-                    </div>
-                    <div
-                      style={{
-                        fontSize: 12,
-                        color: "var(--text3)",
-                        lineHeight: 1.5,
-                      }}
-                    >
-                      {m.desc}
-                    </div>
-                  </button>
-                ))}
-              </div>
             </div>
 
             {/* Error */}
@@ -1390,21 +1306,6 @@ export default function NewGoalPage() {
                       days.
                     </span>
                   )}
-                </p>
-                <p style={{ marginTop: 4 }}>
-                  Mode:{" "}
-                  <strong
-                    style={{
-                      color:
-                        mode === "hard"
-                          ? "var(--mode-active-fg)"
-                          : "var(--text2)",
-                    }}
-                  >
-                    {mode === "hard"
-                      ? "💀 Hard — all backlog hits tomorrow"
-                      : "⚖️ Normal — backlog spreads over 3 days"}
-                  </strong>
                 </p>
               </div>
             )}

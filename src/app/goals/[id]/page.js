@@ -231,7 +231,7 @@ function BacklogDrawer({ backlogItems, onClose }) {
 export default function GoalDetailPage() {
   const { id } = useParams();
   const router = useRouter();
-  const { goals, deleteGoal, updateGoal } = useGoals();
+  const { goals, deleteGoal } = useGoals();
   const goal = goals.find((g) => g.id === id);
   const today = todayStr();
   const [showBacklogDrawer, setShowBacklogDrawer] = useState(false);
@@ -273,10 +273,6 @@ export default function GoalDetailPage() {
       deleteGoal(id);
       router.push("/");
     }
-  };
-
-  const toggleMode = () => {
-    updateGoal(id, { mode: goal.mode === "hard" ? "normal" : "hard" });
   };
 
   const formatDate = (d) =>
@@ -436,18 +432,6 @@ export default function GoalDetailPage() {
             )}
 
             <button
-              onClick={toggleMode}
-              className="btn btn-ghost"
-              style={{
-                fontSize: 13,
-                borderColor:
-                  goal.mode === "hard" ? "var(--accent)" : "var(--border)",
-                color: goal.mode === "hard" ? "var(--accent)" : "var(--text2)",
-              }}
-            >
-              {goal.mode === "hard" ? "💀 Hard Mode" : "⚖️ Normal Mode"}
-            </button>
-            <button
               onClick={handleDelete}
               className="btn btn-ghost"
               style={{
@@ -598,7 +582,7 @@ export default function GoalDetailPage() {
         >
           {plan.map((day, i) => {
             const cfg = STATUS_CONFIG[day.status] || STATUS_CONFIG.upcoming;
-            const allTopics = day.topics; // No auto-merged extra
+            const allTopics = day.topics;
             const isToday = day.date === today;
             const backlogCount = day.extra?.length || 0;
 
