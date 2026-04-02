@@ -5,19 +5,10 @@ import { useRouter } from "next/navigation";
 import { useGoals, totalTopicDays } from "@/app/hooks/useGoals";
 import { searchLibrary, TOPIC_LIBRARY } from "./topics";
 
-// ─── tiny helpers 
-const S = (base, extra = {}) => ({ ...base, ...extra });
-
-// ─── Step indicator 
+// ─── Step dot ───────────────────────────────────────────────────────────────
 function StepDot({ n, active, done }) {
   return (
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        gap: 6,
-      }}
-    >
+    <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
       <div
         style={{
           width: 28,
@@ -31,12 +22,22 @@ function StepDot({ n, active, done }) {
           fontFamily: "Space Mono, monospace",
           transition: "all 0.3s",
           background: done
-            ? "var(--green)"
+            ? "var(--stepdot-done-bg)"
             : active
-              ? "var(--accent)"
+              ? "var(--stepdot-active-bg)"
               : "var(--surface)",
-          border: `2px solid ${done ? "var(--green)" : active ? "var(--accent)" : "var(--border)"}`,
-          color: done || active ? "white" : "var(--text3)",
+          border: `2px solid ${
+            done
+              ? "var(--stepdot-done-border)"
+              : active
+                ? "var(--stepdot-active-bord)"
+                : "var(--border)"
+          }`,
+          color: done
+            ? "var(--stepdot-done-fg)"
+            : active
+              ? "var(--stepdot-active-fg)"
+              : "var(--text3)",
         }}
       >
         {done ? "✓" : n}
@@ -45,7 +46,7 @@ function StepDot({ n, active, done }) {
   );
 }
 
-// ─── Suggestion dropdown card
+// ─── Suggestion dropdown card ────────────────────────────────────────────────
 function SuggestionCard({ entry, onImport }) {
   return (
     <div
@@ -71,7 +72,7 @@ function SuggestionCard({ entry, onImport }) {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: `${entry.color}18`,
+          background: "var(--surface2)",
           flexShrink: 0,
         }}
       >
@@ -99,8 +100,8 @@ function SuggestionCard({ entry, onImport }) {
           borderRadius: 6,
           fontSize: 11,
           fontWeight: 600,
-          background: `${entry.color}18`,
-          color: entry.color,
+          background: "var(--import-badge-bg)",
+          color: "var(--import-badge-fg)",
           whiteSpace: "nowrap",
         }}
       >
@@ -110,7 +111,7 @@ function SuggestionCard({ entry, onImport }) {
   );
 }
 
-// ─── Topic row 
+// ─── Topic row ───────────────────────────────────────────────────────────────
 function TopicRow({
   topic,
   index,
@@ -120,9 +121,10 @@ function TopicRow({
   setEditDays,
   onSaveEdit,
   onRemove,
-  accent,
 }) {
   const isEditing = editingIdx === index;
+  const hasMultiDays = topic.days > 1;
+
   return (
     <div
       style={{
@@ -133,7 +135,7 @@ function TopicRow({
         background: "var(--surface)",
         borderRadius: 10,
         border: "1px solid var(--border)",
-        transition: "border-color 0.2s, box-shadow 0.2s",
+        transition: "border-color 0.2s",
         animation: "slideIn 0.2s ease",
       }}
       onMouseEnter={(e) =>
@@ -143,7 +145,7 @@ function TopicRow({
         (e.currentTarget.style.borderColor = "var(--border)")
       }
     >
-      {/* drag handle look */}
+      {/* drag handle */}
       <div
         style={{
           color: "var(--border2)",
@@ -156,19 +158,20 @@ function TopicRow({
         ⋮⋮
       </div>
 
+      {/* index bubble */}
       <div
         style={{
           width: 20,
           height: 20,
           borderRadius: "50%",
-          background: `${accent}22`,
-          border: `1.5px solid ${accent}55`,
+          background: "var(--topic-num-bg)",
+          border: "1.5px solid var(--topic-num-border)",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           fontSize: 10,
           fontWeight: 700,
-          color: accent,
+          color: "var(--topic-num-fg)",
           flexShrink: 0,
         }}
       >
@@ -194,7 +197,7 @@ function TopicRow({
               padding: "5px 8px",
               textAlign: "center",
               background: "var(--bg2)",
-              border: "1px solid var(--accent)",
+              border: "1px solid var(--border2)",
               borderRadius: 7,
               color: "var(--text)",
               fontSize: 13,
@@ -215,8 +218,8 @@ function TopicRow({
               borderRadius: 7,
               border: "none",
               cursor: "pointer",
-              background: "var(--green)",
-              color: "white",
+              background: "var(--edit-confirm-bg)",
+              color: "var(--edit-confirm-fg)",
               fontSize: 13,
               display: "flex",
               alignItems: "center",
@@ -258,20 +261,30 @@ function TopicRow({
             cursor: "pointer",
             fontFamily: "Space Mono, monospace",
             fontWeight: 700,
-            background: topic.days > 1 ? "rgba(74,158,255,0.12)" : "var(--bg3)",
-            color: topic.days > 1 ? "var(--blue)" : "var(--text3)",
-            border: `1.5px solid ${topic.days > 1 ? "rgba(74,158,255,0.3)" : "var(--border)"}`,
+            background: hasMultiDays
+              ? "var(--topic-days-bg)"
+              : "var(--topic-days-dim-bg)",
+            color: hasMultiDays
+              ? "var(--topic-days-fg)"
+              : "var(--topic-days-dim-fg)",
+            border: `1.5px solid ${hasMultiDays ? "var(--topic-days-border)" : "var(--topic-days-dim-border)"}`,
             transition: "all 0.15s",
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.borderColor = "var(--blue)";
-            e.currentTarget.style.color = "var(--blue)";
+            e.currentTarget.style.background = "var(--topic-days-bg)";
+            e.currentTarget.style.color = "var(--topic-days-fg)";
+            e.currentTarget.style.borderColor = "var(--topic-days-border)";
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.borderColor =
-              topic.days > 1 ? "rgba(74,158,255,0.3)" : "var(--border)";
-            e.currentTarget.style.color =
-              topic.days > 1 ? "var(--blue)" : "var(--text3)";
+            e.currentTarget.style.background = hasMultiDays
+              ? "var(--topic-days-bg)"
+              : "var(--topic-days-dim-bg)";
+            e.currentTarget.style.color = hasMultiDays
+              ? "var(--topic-days-fg)"
+              : "var(--topic-days-dim-fg)";
+            e.currentTarget.style.borderColor = hasMultiDays
+              ? "var(--topic-days-border)"
+              : "var(--topic-days-dim-border)";
           }}
         >
           {topic.days}d
@@ -295,8 +308,8 @@ function TopicRow({
           transition: "all 0.15s",
         }}
         onMouseEnter={(e) => {
-          e.currentTarget.style.background = "rgba(255,77,77,0.1)";
-          e.currentTarget.style.color = "var(--accent)";
+          e.currentTarget.style.background = "var(--topic-remove-hover-bg)";
+          e.currentTarget.style.color = "var(--topic-remove-hover-fg)";
         }}
         onMouseLeave={(e) => {
           e.currentTarget.style.background = "transparent";
@@ -309,7 +322,7 @@ function TopicRow({
   );
 }
 
-// ─── Main page 
+// ─── Main page ───────────────────────────────────────────────────────────────
 export default function NewGoalPage() {
   const { addGoal } = useGoals();
   const router = useRouter();
@@ -324,14 +337,12 @@ export default function NewGoalPage() {
   const [editingIdx, setEditingIdx] = useState(null);
   const [editDays, setEditDays] = useState(1);
 
-  // Autocomplete state
   const [titleSuggestions, setTitleSuggestions] = useState([]);
   const [importedLibEntry, setImportedLibEntry] = useState(null);
   const [showDropdown, setShowDropdown] = useState(false);
   const titleRef = useRef(null);
   const dropdownRef = useRef(null);
 
-  // Close dropdown on outside click
   useEffect(() => {
     const handler = (e) => {
       if (
@@ -363,11 +374,9 @@ export default function NewGoalPage() {
     setTitle(entry.title);
     setShowDropdown(false);
     setImportedLibEntry(entry);
-    // Merge: keep existing custom topics, add library ones not already present
     const existing = topics.map((t) => t.name);
     const newTopics = entry.topics.filter((t) => !existing.includes(t.name));
     setTopics((prev) => [...prev, ...newTopics]);
-    // Auto-suggest deadline
     const reqDays = totalTopicDays([...topics, ...newTopics]);
     if (deadlineDays < reqDays) setDeadlineDays(reqDays);
   };
@@ -447,21 +456,21 @@ export default function NewGoalPage() {
   const step2Done = topics.length > 0;
   const step3Done = deadlineDays > 0;
 
-  // For coloring the goal entry
-  const accentColor = importedLibEntry?.color || "#ff4d4d";
-
   return (
     <>
       <style>{`
         @keyframes slideIn {
           from { opacity: 0; transform: translateY(-6px); }
-          to { opacity: 1; transform: translateY(0); }
+          to   { opacity: 1; transform: translateY(0); }
         }
         @keyframes dropIn {
           from { opacity: 0; transform: translateY(-8px) scaleY(0.95); }
-          to { opacity: 1; transform: translateY(0) scaleY(1); }
+          to   { opacity: 1; transform: translateY(0) scaleY(1); }
         }
-        .topic-input:focus { border-color: var(--accent) !important; box-shadow: 0 0 0 3px rgba(255,77,77,0.1); }
+        .topic-input:focus {
+          border-color: var(--border2) !important;
+          box-shadow: 0 0 0 3px var(--accent-subtle);
+        }
       `}</style>
 
       <div style={{ minHeight: "100vh", background: "var(--bg)" }}>
@@ -543,7 +552,7 @@ export default function NewGoalPage() {
                     ? "Add topics"
                     : !step3Done
                       ? "Set deadline"
-                      : "Ready to launch "}
+                      : "Ready to launch ✓"}
               </span>
             </div>
             <h1
@@ -561,12 +570,12 @@ export default function NewGoalPage() {
             </h1>
             <p style={{ color: "var(--text3)", fontSize: 14 }}>
               Name your goal and we'll suggest topics automatically. Set how
-              many days each topic needs - StackFlow schedules everything.
+              many days each topic needs — StackFlow schedules everything.
             </p>
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
-            {/* ── SECTION 1: Title + autocomplete ── */}
+            {/* ── SECTION 1: Title ── */}
             <div
               style={{
                 background: "var(--surface)",
@@ -574,7 +583,6 @@ export default function NewGoalPage() {
                 borderRadius: 16,
                 padding: "24px",
                 position: "relative",
-                transition: "border-color 0.2s",
               }}
             >
               <div
@@ -585,7 +593,6 @@ export default function NewGoalPage() {
                   marginBottom: 16,
                 }}
               >
-                
                 <span
                   style={{
                     fontFamily: "Syne, sans-serif",
@@ -633,7 +640,7 @@ export default function NewGoalPage() {
                   }}
                 />
 
-                {/* Autocomplete dropdown */}
+                {/* Dropdown */}
                 {showDropdown && titleSuggestions.length > 0 && (
                   <div
                     ref={dropdownRef}
@@ -684,15 +691,15 @@ export default function NewGoalPage() {
                     marginTop: 10,
                     padding: "8px 12px",
                     borderRadius: 8,
-                    background: `${importedLibEntry.color}12`,
-                    border: `1px solid ${importedLibEntry.color}30`,
+                    background: "var(--lib-badge-bg)",
+                    border: "1px solid var(--lib-badge-border)",
                   }}
                 >
                   <span>{importedLibEntry.emoji}</span>
                   <span
                     style={{
                       fontSize: 12,
-                      color: importedLibEntry.color,
+                      color: "var(--lib-badge-fg)",
                       fontWeight: 600,
                     }}
                   >
@@ -706,7 +713,7 @@ export default function NewGoalPage() {
                       background: "none",
                       border: "none",
                       cursor: "pointer",
-                      color: importedLibEntry.color,
+                      color: "var(--text2)",
                       fontSize: 16,
                     }}
                   >
@@ -715,7 +722,7 @@ export default function NewGoalPage() {
                 </div>
               )}
 
-              {/* Browse all library */}
+              {/* Browse library pills */}
               <div style={{ marginTop: 14 }}>
                 <p
                   style={{
@@ -736,18 +743,26 @@ export default function NewGoalPage() {
                         borderRadius: 100,
                         fontSize: 12,
                         cursor: "pointer",
-                        background: `${entry.color}12`,
-                        border: `1px solid ${entry.color}30`,
-                        color: entry.color,
+                        background: "var(--lib-pill-bg)",
+                        border: "1px solid var(--lib-pill-border)",
+                        color: "var(--lib-pill-fg)",
                         transition: "all 0.15s",
                         fontWeight: 500,
                       }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.background = `${entry.color}25`;
+                        e.currentTarget.style.background =
+                          "var(--lib-pill-hover-bg)";
+                        e.currentTarget.style.borderColor =
+                          "var(--lib-pill-hover-border)";
+                        e.currentTarget.style.color =
+                          "var(--lib-pill-hover-fg)";
                         e.currentTarget.style.transform = "translateY(-1px)";
                       }}
                       onMouseLeave={(e) => {
-                        e.currentTarget.style.background = `${entry.color}12`;
+                        e.currentTarget.style.background = "var(--lib-pill-bg)";
+                        e.currentTarget.style.borderColor =
+                          "var(--lib-pill-border)";
+                        e.currentTarget.style.color = "var(--lib-pill-fg)";
                         e.currentTarget.style.transform = "none";
                       }}
                     >
@@ -775,7 +790,6 @@ export default function NewGoalPage() {
                   marginBottom: 16,
                 }}
               >
-                
                 <span
                   style={{
                     fontFamily: "Syne, sans-serif",
@@ -792,10 +806,10 @@ export default function NewGoalPage() {
                       marginLeft: 6,
                       padding: "2px 10px",
                       borderRadius: 100,
-                      background: "rgba(74,158,255,0.1)",
-                      border: "1px solid rgba(74,158,255,0.2)",
+                      background: "var(--topic-count-bg)",
+                      border: "1px solid var(--topic-count-border)",
                       fontSize: 12,
-                      color: "var(--blue)",
+                      color: "var(--topic-count-fg)",
                       fontFamily: "Space Mono, monospace",
                     }}
                   >
@@ -841,7 +855,6 @@ export default function NewGoalPage() {
                   style={{
                     display: "flex",
                     alignItems: "center",
-                    gap: 0,
                     background: "var(--bg2)",
                     border: "1.5px solid var(--border)",
                     borderRadius: 10,
@@ -926,7 +939,7 @@ export default function NewGoalPage() {
                     border: "none",
                     cursor: "pointer",
                     background: "var(--accent)",
-                    color: "white",
+                    color: "var(--accent-fg)",
                     fontSize: 13,
                     fontWeight: 600,
                     fontFamily: "DM Sans, sans-serif",
@@ -936,11 +949,11 @@ export default function NewGoalPage() {
                     gap: 6,
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.background = "#ff3333";
+                    e.currentTarget.style.opacity = "0.85";
                     e.currentTarget.style.transform = "translateY(-1px)";
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.background = "var(--accent)";
+                    e.currentTarget.style.opacity = "1";
                     e.currentTarget.style.transform = "none";
                   }}
                 >
@@ -956,7 +969,7 @@ export default function NewGoalPage() {
                 }}
               >
                 Click the{" "}
-                <strong style={{ color: "var(--blue)" }}>Xd badge</strong> on
+                <strong style={{ color: "var(--text2)" }}>Xd badge</strong> on
                 any topic to edit its duration. Press Enter to quickly add.
               </p>
 
@@ -983,7 +996,6 @@ export default function NewGoalPage() {
                       setEditDays={setEditDays}
                       onSaveEdit={saveEdit}
                       onRemove={removeTopic}
-                      accent={accentColor}
                     />
                   ))}
                 </div>
@@ -1007,7 +1019,7 @@ export default function NewGoalPage() {
               )}
             </div>
 
-            {/* ── SECTION 3: Deadline + Mode ── */}
+            {/* ── SECTION 3: Deadline & Mode ── */}
             <div
               style={{
                 background: "var(--surface)",
@@ -1029,7 +1041,7 @@ export default function NewGoalPage() {
                     width: 30,
                     height: 30,
                     borderRadius: 8,
-                    background: "rgba(255,209,102,0.1)",
+                    background: "var(--surface2)",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
@@ -1060,7 +1072,7 @@ export default function NewGoalPage() {
                 </span>
               </div>
 
-              {/* Deadline visual slider + input */}
+              {/* Deadline slider */}
               <div style={{ marginBottom: 24 }}>
                 <div
                   style={{
@@ -1095,7 +1107,7 @@ export default function NewGoalPage() {
                         padding: "6px 10px",
                         textAlign: "center",
                         background: "var(--bg2)",
-                        border: `1.5px solid ${overDeadline ? "var(--accent)" : "var(--border)"}`,
+                        border: `1.5px solid ${overDeadline ? "var(--border2)" : "var(--border)"}`,
                         borderRadius: 8,
                         color: "var(--text)",
                         fontSize: 15,
@@ -1117,9 +1129,7 @@ export default function NewGoalPage() {
                   onChange={(e) => setDeadlineDays(Number(e.target.value))}
                   style={{
                     width: "100%",
-                    accentColor: overDeadline
-                      ? "var(--accent)"
-                      : "var(--green)",
+                    accentColor: "var(--text2)",
                     cursor: "pointer",
                   }}
                 />
@@ -1137,7 +1147,7 @@ export default function NewGoalPage() {
                 </div>
               </div>
 
-              {/* Stats row */}
+              {/* Stat mini-cards */}
               {topics.length > 0 && (
                 <div
                   style={{
@@ -1151,17 +1161,19 @@ export default function NewGoalPage() {
                     {
                       label: "Topics",
                       value: topics.length,
-                      color: "var(--blue)",
+                      colorVar: "var(--text2)",
                     },
                     {
                       label: "Topic Days",
                       value: `${reqDays}d`,
-                      color: overDeadline ? "var(--accent)" : "var(--green)",
+                      colorVar: overDeadline
+                        ? "var(--stat-mini-val-warn)"
+                        : "var(--stat-mini-val-ok)",
                     },
                     {
                       label: "Deadline",
                       value: `${deadlineDays}d`,
-                      color: "var(--accent3)",
+                      colorVar: "var(--stat-mini-val-b)",
                     },
                   ].map((s) => (
                     <div
@@ -1178,7 +1190,7 @@ export default function NewGoalPage() {
                           fontSize: 20,
                           fontFamily: "Space Mono, monospace",
                           fontWeight: 700,
-                          color: s.color,
+                          color: s.colorVar,
                         }}
                       >
                         {s.value}
@@ -1199,16 +1211,17 @@ export default function NewGoalPage() {
                 </div>
               )}
 
+              {/* Over-deadline warning */}
               {overDeadline && (
                 <div
                   style={{
                     padding: "10px 14px",
                     borderRadius: 8,
                     marginBottom: 20,
-                    background: "rgba(255,77,77,0.07)",
-                    border: "1px solid rgba(255,77,77,0.25)",
+                    background: "var(--warn-bg)",
+                    border: "1px solid var(--warn-border)",
                     fontSize: 13,
-                    color: "var(--accent)",
+                    color: "var(--warn-fg)",
                     display: "flex",
                     gap: 8,
                   }}
@@ -1250,14 +1263,12 @@ export default function NewGoalPage() {
                     label: "Normal Mode",
                     desc: "Backlog spreads over next 3 days. Manageable pressure.",
                     icon: "⚖️",
-                    color: "var(--blue)",
                   },
                   {
                     value: "hard",
                     label: "Hard Mode",
                     desc: "All backlog hits tomorrow. Maximum accountability.",
                     icon: "💀",
-                    color: "var(--accent)",
                   },
                 ].map((m) => (
                   <button
@@ -1269,9 +1280,11 @@ export default function NewGoalPage() {
                       cursor: "pointer",
                       textAlign: "left",
                       transition: "all 0.2s",
-                      border: `2px solid ${mode === m.value ? m.color : "var(--border)"}`,
+                      border: `2px solid ${mode === m.value ? "var(--mode-active-border)" : "var(--mode-idle-border)"}`,
                       background:
-                        mode === m.value ? `${m.color}10` : "var(--bg2)",
+                        mode === m.value
+                          ? "var(--mode-active-bg)"
+                          : "var(--mode-idle-bg)",
                     }}
                   >
                     <div style={{ fontSize: 22, marginBottom: 6 }}>
@@ -1282,8 +1295,11 @@ export default function NewGoalPage() {
                         fontFamily: "Syne, sans-serif",
                         fontWeight: 700,
                         fontSize: 14,
-                        color: mode === m.value ? m.color : "var(--text)",
                         marginBottom: 4,
+                        color:
+                          mode === m.value
+                            ? "var(--mode-active-fg)"
+                            : "var(--mode-idle-fg)",
                       }}
                     >
                       {m.label}
@@ -1308,10 +1324,10 @@ export default function NewGoalPage() {
                 style={{
                   padding: "12px 16px",
                   borderRadius: 10,
-                  background: "rgba(255,77,77,0.08)",
-                  border: "1px solid rgba(255,77,77,0.25)",
+                  background: "var(--warn-bg)",
+                  border: "1px solid var(--warn-border)",
                   fontSize: 13,
-                  color: "var(--accent)",
+                  color: "var(--warn-fg)",
                   display: "flex",
                   gap: 8,
                   alignItems: "center",
@@ -1328,9 +1344,9 @@ export default function NewGoalPage() {
                   padding: "18px 20px",
                   borderRadius: 14,
                   background: overDeadline
-                    ? "rgba(255,77,77,0.05)"
-                    : "rgba(6,214,160,0.05)",
-                  border: `1px solid ${overDeadline ? "rgba(255,77,77,0.2)" : "rgba(6,214,160,0.2)"}`,
+                    ? "var(--warn-bg)"
+                    : "var(--summary-ok-bg)",
+                  border: `1px solid ${overDeadline ? "var(--warn-border)" : "var(--summary-ok-border)"}`,
                   fontSize: 14,
                   color: "var(--text2)",
                   lineHeight: 1.8,
@@ -1345,29 +1361,31 @@ export default function NewGoalPage() {
                     marginBottom: 8,
                   }}
                 >
-                   Schedule Summary
+                  Schedule Summary
                 </div>
                 <p>
-                  <strong style={{ color: "var(--text)" }}>{title}</strong> - {" "}
+                  <strong style={{ color: "var(--text)" }}>{title}</strong> —{" "}
                   {topics.length} topics needing{" "}
                   <strong
                     style={{
-                      color: overDeadline ? "var(--accent)" : "var(--green)",
+                      color: overDeadline
+                        ? "var(--warn-fg)"
+                        : "var(--summary-ok-fg)",
                     }}
                   >
                     {reqDays} study days
                   </strong>
                   , spread across{" "}
-                  <strong style={{ color: "var(--blue)" }}>
+                  <strong style={{ color: "var(--text2)" }}>
                     {deadlineDays} calendar days
                   </strong>
                   .{" "}
                   {overDeadline ? (
-                    <span style={{ color: "var(--accent)" }}>
+                    <span style={{ color: "var(--warn-fg)" }}>
                       Topics will be compressed — consider increasing deadline.
                     </span>
                   ) : (
-                    <span style={{ color: "var(--green)" }}>
+                    <span style={{ color: "var(--summary-ok-fg)" }}>
                       Every single day will have a topic assigned. No empty
                       days.
                     </span>
@@ -1377,12 +1395,15 @@ export default function NewGoalPage() {
                   Mode:{" "}
                   <strong
                     style={{
-                      color: mode === "hard" ? "var(--accent)" : "var(--blue)",
+                      color:
+                        mode === "hard"
+                          ? "var(--mode-active-fg)"
+                          : "var(--text2)",
                     }}
                   >
                     {mode === "hard"
-                      ? "💀 Hard - all backlog hits tomorrow"
-                      : "⚖️ Normal - backlog spreads over 3 days"}
+                      ? "💀 Hard — all backlog hits tomorrow"
+                      : "⚖️ Normal — backlog spreads over 3 days"}
                   </strong>
                 </p>
               </div>
@@ -1398,7 +1419,8 @@ export default function NewGoalPage() {
                 cursor: "pointer",
                 background:
                   step1Done && step2Done ? "var(--accent)" : "var(--surface)",
-                color: step1Done && step2Done ? "white" : "var(--text3)",
+                color:
+                  step1Done && step2Done ? "var(--accent-fg)" : "var(--text3)",
                 fontSize: 16,
                 fontWeight: 700,
                 fontFamily: "Syne, sans-serif",
@@ -1410,21 +1432,21 @@ export default function NewGoalPage() {
                 opacity: step1Done && step2Done ? 1 : 0.5,
                 boxShadow:
                   step1Done && step2Done
-                    ? "0 4px 24px rgba(255,77,77,0.25)"
+                    ? "0 4px 24px rgba(0,0,0,0.2)"
                     : "none",
               }}
               onMouseEnter={(e) => {
                 if (step1Done && step2Done) {
                   e.currentTarget.style.transform = "translateY(-2px)";
                   e.currentTarget.style.boxShadow =
-                    "0 8px 32px rgba(255,77,77,0.35)";
+                    "0 8px 32px rgba(0,0,0,0.28)";
                 }
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = "none";
                 e.currentTarget.style.boxShadow =
                   step1Done && step2Done
-                    ? "0 4px 24px rgba(255,77,77,0.25)"
+                    ? "0 4px 24px rgba(0,0,0,0.2)"
                     : "none";
               }}
             >

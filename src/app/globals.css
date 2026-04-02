@@ -2,80 +2,316 @@
 
 @import "tailwindcss";
 
-/* ─── DARK THEME (default) ─────────────────────────────────────────────────
-   Two-color system: near-black backgrounds + off-white text.
-   Every surface, border, badge, and status is a shade between these two.
-──────────────────────────────────────────────────────────────────────────── */
+/* ════════════════════════════════════════════════════════════════════════════
+   DARK THEME (default)
+   Strict 2-color system: #111111 (black) ↔ #efefef (white).
+   Every token is a shade, opacity, or mix — no third hue.
+════════════════════════════════════════════════════════════════════════════ */
 :root {
-  /* Backgrounds — darkest → lightest */
+  /* ── Backgrounds ── */
   --bg:       #111111;
   --bg2:      #161616;
   --bg3:      #1c1c1c;
 
-  /* Surfaces (cards, modals) */
+  /* ── Surfaces ── */
   --surface:  #1e1e1e;
   --surface2: #242424;
 
-  /* Borders */
+  /* ── Borders ── */
   --border:   #2a2a2a;
   --border2:  #363636;
 
-  /* Text — brightest → dimmest */
+  /* ── Text ── */
   --text:     #efefef;
   --text2:    #888888;
   --text3:    #444444;
 
-  /* Single accent: a bright off-white used sparingly for CTAs */
-  --accent:   #efefef;
-  --accent-fg:#111111;   /* text on accent buttons */
+  /* ── Accent (CTA / highlight) ── */
+  --accent:        #efefef;
+  --accent-fg:     #111111;
+  --accent-subtle: rgba(239, 239, 239, 0.07);
+  --accent-border: rgba(239, 239, 239, 0.18);
 
-  /* Status shades — all greyscale tints */
-  --status-done-bg:    rgba(239,239,239, 0.08);
+  /* ── Hero orbs / glow ── */
+  --hero-glow:  rgba(239, 239, 239, 0.05);
+  --hero-orb-a: rgba(239, 239, 239, 0.04);
+  --hero-orb-b: rgba(239, 239, 239, 0.03);
+
+  /* ── How-It-Works step colors (step 1 = brightest → step 5 = dimmest) ── */
+  --step-1-color:  #efefef;
+  --step-1-bg:     rgba(239, 239, 239, 0.07);
+  --step-1-border: rgba(239, 239, 239, 0.16);
+
+  --step-2-color:  #c8c8c8;
+  --step-2-bg:     rgba(239, 239, 239, 0.05);
+  --step-2-border: rgba(239, 239, 239, 0.12);
+
+  --step-3-color:  #aaaaaa;
+  --step-3-bg:     rgba(239, 239, 239, 0.04);
+  --step-3-border: rgba(239, 239, 239, 0.10);
+
+  --step-4-color:  #888888;
+  --step-4-bg:     rgba(239, 239, 239, 0.03);
+  --step-4-border: rgba(239, 239, 239, 0.08);
+
+  --step-5-color:  #666666;
+  --step-5-bg:     rgba(239, 239, 239, 0.02);
+  --step-5-border: rgba(239, 239, 239, 0.06);
+
+  /* ── Problem section ── */
+  --problem-tag-bg:      rgba(239, 239, 239, 0.05);
+  --problem-tag-border:  rgba(239, 239, 239, 0.15);
+  --problem-tag-color:   #efefef;
+  --problem-row-hl-bg:   rgba(239, 239, 239, 0.04);
+  --problem-row-hl-bord: rgba(239, 239, 239, 0.18);
+  --problem-topbar:      rgba(239, 239, 239, 0.30);
+
+  /* ── CTA section ── */
+  --cta-grid-line: rgba(239, 239, 239, 0.025);
+  --cta-glow:      rgba(239, 239, 239, 0.05);
+
+  /* ── Stat strip (home) ── */
+  --stat-value: #efefef;
+
+  /* ── New Goal page ── */
+  /* Step dot */
+  --stepdot-done-bg:     #efefef;
+  --stepdot-done-border: #efefef;
+  --stepdot-done-fg:     #111111;
+  --stepdot-active-bg:   #efefef;
+  --stepdot-active-bord: #efefef;
+  --stepdot-active-fg:   #111111;
+
+  /* Topic number bubble */
+  --topic-num-bg:     rgba(239, 239, 239, 0.08);
+  --topic-num-border: rgba(239, 239, 239, 0.20);
+  --topic-num-fg:     #efefef;
+
+  /* Topic day badge (when days > 1) */
+  --topic-days-bg:     rgba(239, 239, 239, 0.08);
+  --topic-days-border: rgba(239, 239, 239, 0.20);
+  --topic-days-fg:     #c8c8c8;
+  /* Topic day badge (days = 1, dimmer) */
+  --topic-days-dim-bg:     transparent;
+  --topic-days-dim-border: var(--border);
+  --topic-days-dim-fg:     var(--text3);
+
+  /* Topic remove button hover */
+  --topic-remove-hover-bg: rgba(239, 239, 239, 0.08);
+  --topic-remove-hover-fg: #efefef;
+
+  /* Edit confirm button */
+  --edit-confirm-bg: #efefef;
+  --edit-confirm-fg: #111111;
+
+  /* Topic count badge */
+  --topic-count-bg:     rgba(239, 239, 239, 0.07);
+  --topic-count-border: rgba(239, 239, 239, 0.15);
+  --topic-count-fg:     #c8c8c8;
+
+  /* Warning / over-deadline */
+  --warn-bg:     rgba(239, 239, 239, 0.05);
+  --warn-border: rgba(239, 239, 239, 0.18);
+  --warn-fg:     #efefef;
+
+  /* Summary card — ok state */
+  --summary-ok-bg:     rgba(239, 239, 239, 0.04);
+  --summary-ok-border: rgba(239, 239, 239, 0.14);
+  --summary-ok-fg:     #c8c8c8;    /* "ok" value color */
+
+  /* Summary card — over state (reuses warn tokens) */
+
+  /* Stat mini-cards inside deadline section */
+  --stat-mini-val-ok:   #c8c8c8;   /* topic days when fine */
+  --stat-mini-val-warn: #efefef;   /* topic days when over deadline */
+  --stat-mini-val-b:    #888888;   /* deadline days */
+
+  /* Mode toggle */
+  --mode-active-bg:     rgba(239, 239, 239, 0.07);
+  --mode-active-border: rgba(239, 239, 239, 0.25);
+  --mode-active-fg:     #efefef;
+  --mode-idle-bg:       var(--bg2);
+  --mode-idle-border:   var(--border);
+  --mode-idle-fg:       var(--text);
+
+  /* Suggestion card import badge */
+  --import-badge-bg:     rgba(239, 239, 239, 0.08);
+  --import-badge-fg:     #c8c8c8;
+
+  /* Imported library badge strip */
+  --lib-badge-bg:     rgba(239, 239, 239, 0.06);
+  --lib-badge-border: rgba(239, 239, 239, 0.15);
+  --lib-badge-fg:     #c8c8c8;
+
+  /* Browse library pill buttons */
+  --lib-pill-bg:     rgba(239, 239, 239, 0.05);
+  --lib-pill-border: rgba(239, 239, 239, 0.14);
+  --lib-pill-fg:     #888888;
+  --lib-pill-hover-bg:     rgba(239, 239, 239, 0.10);
+  --lib-pill-hover-border: rgba(239, 239, 239, 0.25);
+  --lib-pill-hover-fg:     #efefef;
+
+  /* ── Status badges ── */
+  --status-done-bg:    rgba(239, 239, 239, 0.08);
   --status-done-fg:    #c8c8c8;
-  --status-pending-bg: rgba(239,239,239, 0.05);
+  --status-pending-bg: rgba(239, 239, 239, 0.05);
   --status-pending-fg: #999999;
-  --status-missed-bg:  rgba(239,239,239, 0.04);
+  --status-missed-bg:  rgba(239, 239, 239, 0.04);
   --status-missed-fg:  #666666;
-  --status-today-bg:   rgba(239,239,239, 0.10);
+  --status-today-bg:   rgba(239, 239, 239, 0.10);
   --status-today-fg:   #efefef;
-  --status-overdue-bg: rgba(239,239,239, 0.04);
+  --status-overdue-bg: rgba(239, 239, 239, 0.04);
   --status-overdue-fg: #777777;
 }
 
-/* ─── LIGHT THEME ──────────────────────────────────────────────────────────
-   Two-color system: near-white backgrounds + near-black text.
-──────────────────────────────────────────────────────────────────────────── */
+/* ════════════════════════════════════════════════════════════════════════════
+   LIGHT THEME
+   Strict 2-color system: #f5f5f5 (white) ↔ #111111 (black).
+════════════════════════════════════════════════════════════════════════════ */
 [data-theme="light"] {
+  /* ── Backgrounds ── */
   --bg:       #f5f5f5;
   --bg2:      #eeeeee;
   --bg3:      #e7e7e7;
 
+  /* ── Surfaces ── */
   --surface:  #ffffff;
   --surface2: #f8f8f8;
 
+  /* ── Borders ── */
   --border:   #d8d8d8;
   --border2:  #c2c2c2;
 
+  /* ── Text ── */
   --text:     #111111;
   --text2:    #555555;
   --text3:    #aaaaaa;
 
-  --accent:   #111111;
-  --accent-fg:#ffffff;
+  /* ── Accent ── */
+  --accent:        #111111;
+  --accent-fg:     #ffffff;
+  --accent-subtle: rgba(17, 17, 17, 0.06);
+  --accent-border: rgba(17, 17, 17, 0.18);
 
-  --status-done-bg:    rgba(17,17,17, 0.07);
+  /* ── Hero ── */
+  --hero-glow:  rgba(17, 17, 17, 0.04);
+  --hero-orb-a: rgba(17, 17, 17, 0.03);
+  --hero-orb-b: rgba(17, 17, 17, 0.02);
+
+  /* ── How-It-Works steps ── */
+  --step-1-color:  #111111;
+  --step-1-bg:     rgba(17, 17, 17, 0.06);
+  --step-1-border: rgba(17, 17, 17, 0.14);
+
+  --step-2-color:  #333333;
+  --step-2-bg:     rgba(17, 17, 17, 0.05);
+  --step-2-border: rgba(17, 17, 17, 0.11);
+
+  --step-3-color:  #555555;
+  --step-3-bg:     rgba(17, 17, 17, 0.04);
+  --step-3-border: rgba(17, 17, 17, 0.09);
+
+  --step-4-color:  #777777;
+  --step-4-bg:     rgba(17, 17, 17, 0.03);
+  --step-4-border: rgba(17, 17, 17, 0.07);
+
+  --step-5-color:  #999999;
+  --step-5-bg:     rgba(17, 17, 17, 0.02);
+  --step-5-border: rgba(17, 17, 17, 0.05);
+
+  /* ── Problem section ── */
+  --problem-tag-bg:      rgba(17, 17, 17, 0.05);
+  --problem-tag-border:  rgba(17, 17, 17, 0.15);
+  --problem-tag-color:   #111111;
+  --problem-row-hl-bg:   rgba(17, 17, 17, 0.04);
+  --problem-row-hl-bord: rgba(17, 17, 17, 0.18);
+  --problem-topbar:      rgba(17, 17, 17, 0.35);
+
+  /* ── CTA section ── */
+  --cta-grid-line: rgba(17, 17, 17, 0.04);
+  --cta-glow:      rgba(17, 17, 17, 0.04);
+
+  /* ── Stat strip ── */
+  --stat-value: #111111;
+
+  /* ── New Goal page ── */
+  --stepdot-done-bg:     #111111;
+  --stepdot-done-border: #111111;
+  --stepdot-done-fg:     #ffffff;
+  --stepdot-active-bg:   #111111;
+  --stepdot-active-bord: #111111;
+  --stepdot-active-fg:   #ffffff;
+
+  --topic-num-bg:     rgba(17, 17, 17, 0.07);
+  --topic-num-border: rgba(17, 17, 17, 0.18);
+  --topic-num-fg:     #333333;
+
+  --topic-days-bg:     rgba(17, 17, 17, 0.07);
+  --topic-days-border: rgba(17, 17, 17, 0.18);
+  --topic-days-fg:     #333333;
+  --topic-days-dim-bg:     transparent;
+  --topic-days-dim-border: var(--border);
+  --topic-days-dim-fg:     var(--text3);
+
+  --topic-remove-hover-bg: rgba(17, 17, 17, 0.07);
+  --topic-remove-hover-fg: #111111;
+
+  --edit-confirm-bg: #111111;
+  --edit-confirm-fg: #ffffff;
+
+  --topic-count-bg:     rgba(17, 17, 17, 0.06);
+  --topic-count-border: rgba(17, 17, 17, 0.14);
+  --topic-count-fg:     #555555;
+
+  --warn-bg:     rgba(17, 17, 17, 0.05);
+  --warn-border: rgba(17, 17, 17, 0.18);
+  --warn-fg:     #111111;
+
+  --summary-ok-bg:     rgba(17, 17, 17, 0.04);
+  --summary-ok-border: rgba(17, 17, 17, 0.12);
+  --summary-ok-fg:     #333333;
+
+  --stat-mini-val-ok:   #333333;
+  --stat-mini-val-warn: #111111;
+  --stat-mini-val-b:    #777777;
+
+  --mode-active-bg:     rgba(17, 17, 17, 0.07);
+  --mode-active-border: rgba(17, 17, 17, 0.30);
+  --mode-active-fg:     #111111;
+  --mode-idle-bg:       var(--bg2);
+  --mode-idle-border:   var(--border);
+  --mode-idle-fg:       var(--text);
+
+  --import-badge-bg:     rgba(17, 17, 17, 0.06);
+  --import-badge-fg:     #555555;
+
+  --lib-badge-bg:     rgba(17, 17, 17, 0.05);
+  --lib-badge-border: rgba(17, 17, 17, 0.14);
+  --lib-badge-fg:     #555555;
+
+  --lib-pill-bg:     rgba(17, 17, 17, 0.04);
+  --lib-pill-border: rgba(17, 17, 17, 0.12);
+  --lib-pill-fg:     #777777;
+  --lib-pill-hover-bg:     rgba(17, 17, 17, 0.09);
+  --lib-pill-hover-border: rgba(17, 17, 17, 0.25);
+  --lib-pill-hover-fg:     #111111;
+
+  /* ── Status badges ── */
+  --status-done-bg:    rgba(17, 17, 17, 0.07);
   --status-done-fg:    #333333;
-  --status-pending-bg: rgba(17,17,17, 0.05);
+  --status-pending-bg: rgba(17, 17, 17, 0.05);
   --status-pending-fg: #555555;
-  --status-missed-bg:  rgba(17,17,17, 0.04);
+  --status-missed-bg:  rgba(17, 17, 17, 0.04);
   --status-missed-fg:  #888888;
-  --status-today-bg:   rgba(17,17,17, 0.09);
+  --status-today-bg:   rgba(17, 17, 17, 0.09);
   --status-today-fg:   #111111;
-  --status-overdue-bg: rgba(17,17,17, 0.04);
+  --status-overdue-bg: rgba(17, 17, 17, 0.04);
   --status-overdue-fg: #777777;
 }
 
-/* ─── RESET ─────────────────────────────────────────────────────────────── */
+/* ════════════════════════════════════════════════════════════════════════════
+   RESET
+════════════════════════════════════════════════════════════════════════════ */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -94,20 +330,20 @@ body {
   min-height: 100vh;
 }
 
-/* ─── SCROLLBAR ──────────────────────────────────────────────────────────── */
+/* ── Scrollbar ── */
 ::-webkit-scrollbar          { width: 6px; }
 ::-webkit-scrollbar-track    { background: var(--bg2); }
 ::-webkit-scrollbar-thumb    { background: var(--border2); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--text3); }
 
-/* ─── SELECTION ──────────────────────────────────────────────────────────── */
+/* ── Selection ── */
 ::selection { background: var(--accent); color: var(--accent-fg); }
 
-/* ─── TYPOGRAPHY UTILITIES ───────────────────────────────────────────────── */
+/* ── Typography utilities ── */
 .font-display { font-family: 'Syne', sans-serif; }
 .font-mono    { font-family: 'Space Mono', monospace; }
 
-/* ─── NOISE TEXTURE ──────────────────────────────────────────────────────── */
+/* ── Noise texture ── */
 .noise::before {
   content: '';
   position: fixed;
@@ -118,7 +354,9 @@ body {
   opacity: 0.4;
 }
 
-/* ─── CARD ───────────────────────────────────────────────────────────────── */
+/* ════════════════════════════════════════════════════════════════════════════
+   CARD
+════════════════════════════════════════════════════════════════════════════ */
 .card {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -127,10 +365,12 @@ body {
 }
 .card:hover {
   border-color: var(--border2);
-  box-shadow: 0 2px 16px rgba(0,0,0,0.12);
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.12);
 }
 
-/* ─── PROGRESS BAR ───────────────────────────────────────────────────────── */
+/* ════════════════════════════════════════════════════════════════════════════
+   PROGRESS BAR
+════════════════════════════════════════════════════════════════════════════ */
 .progress-bar {
   height: 4px;
   border-radius: 2px;
@@ -144,7 +384,9 @@ body {
   transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ─── BUTTONS ────────────────────────────────────────────────────────────── */
+/* ════════════════════════════════════════════════════════════════════════════
+   BUTTONS
+════════════════════════════════════════════════════════════════════════════ */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -161,7 +403,6 @@ body {
   white-space: nowrap;
 }
 
-/* Primary: solid accent (white on dark / black on light) */
 .btn-primary {
   background: var(--accent);
   color: var(--accent-fg);
@@ -170,10 +411,9 @@ body {
 .btn-primary:hover {
   opacity: 0.88;
   transform: translateY(-1px);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22);
 }
 
-/* Secondary: muted surface */
 .btn-secondary {
   background: var(--surface2);
   color: var(--text);
@@ -184,7 +424,6 @@ body {
   background: var(--bg3);
 }
 
-/* Ghost: transparent */
 .btn-ghost {
   background: transparent;
   color: var(--text2);
@@ -195,7 +434,9 @@ body {
   color: var(--text);
 }
 
-/* ─── INPUT ──────────────────────────────────────────────────────────────── */
+/* ════════════════════════════════════════════════════════════════════════════
+   INPUT
+════════════════════════════════════════════════════════════════════════════ */
 .input {
   width: 100%;
   padding: 10px 14px;
@@ -210,14 +451,13 @@ body {
 }
 .input:focus {
   border-color: var(--text2);
-  box-shadow: 0 0 0 3px rgba(239,239,239,0.06);
-}
-[data-theme="light"] .input:focus {
-  box-shadow: 0 0 0 3px rgba(17,17,17,0.06);
+  box-shadow: 0 0 0 3px var(--accent-subtle);
 }
 .input::placeholder { color: var(--text3); }
 
-/* ─── BADGE ──────────────────────────────────────────────────────────────── */
+/* ════════════════════════════════════════════════════════════════════════════
+   BADGE
+════════════════════════════════════════════════════════════════════════════ */
 .badge {
   display: inline-flex;
   align-items: center;
@@ -231,14 +471,18 @@ body {
   border: 1px solid var(--border);
 }
 
-
+/* ════════════════════════════════════════════════════════════════════════════
+   STATUS BADGES
+════════════════════════════════════════════════════════════════════════════ */
 .status-done    { background: var(--status-done-bg);    color: var(--status-done-fg); }
 .status-pending { background: var(--status-pending-bg); color: var(--status-pending-fg); }
 .status-missed  { background: var(--status-missed-bg);  color: var(--status-missed-fg); }
 .status-today   { background: var(--status-today-bg);   color: var(--status-today-fg); }
 .status-overdue { background: var(--status-overdue-bg); color: var(--status-overdue-fg); }
 
-/* ─── NAVBAR ─────────────────────────────────────────────────────────────── */
+/* ════════════════════════════════════════════════════════════════════════════
+   NAVBAR
+════════════════════════════════════════════════════════════════════════════ */
 .navbar {
   background: var(--bg2);
   border-bottom: 1px solid var(--border);
@@ -257,7 +501,9 @@ body {
   color: var(--text);
 }
 
-/* ─── ANIMATIONS ─────────────────────────────────────────────────────────── */
+/* ════════════════════════════════════════════════════════════════════════════
+   ANIMATIONS
+════════════════════════════════════════════════════════════════════════════ */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(12px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -267,15 +513,14 @@ body {
   to   { opacity: 1; }
 }
 @keyframes pulse-subtle {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(239,239,239,0.12); }
-  50%       { box-shadow: 0 0 0 8px rgba(239,239,239,0); }
+  0%, 100% { box-shadow: 0 0 0 0 var(--accent-subtle); }
+  50%       { box-shadow: 0 0 0 8px transparent; }
 }
 
-.animate-fadeUp  { animation: fadeUp  0.4s ease both; }
-.animate-fadeIn  { animation: fadeIn  0.3s ease both; }
-.pulse-subtle    { animation: pulse-subtle 2s infinite; }
+.animate-fadeUp { animation: fadeUp  0.4s ease both; }
+.animate-fadeIn { animation: fadeIn  0.3s ease both; }
+.pulse-subtle   { animation: pulse-subtle 2s infinite; }
 
-/* Stagger delays */
 .delay-1 { animation-delay: 0.05s; }
 .delay-2 { animation-delay: 0.10s; }
 .delay-3 { animation-delay: 0.15s; }
