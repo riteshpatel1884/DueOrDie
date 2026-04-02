@@ -4,7 +4,7 @@ import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
 
 export const metadata = {
-  title: "DueOrDie— Dynamic Backlog Pressure System",
+  title: "DueOrDie",
   description: "Track your study goals. Feel the pressure. Get it done.",
 };
 
