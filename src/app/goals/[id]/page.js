@@ -163,7 +163,7 @@ export default function GoalDetailPage() {
               color: goal.mode === "hard" ? "var(--accent)" : "var(--text2)",
             }}
           >
-            {goal.mode === "hard" ? "🔥 Hard Mode" : "⚖️ Normal Mode"}
+            {goal.mode === "hard" ? "Hard Mode" : "Normal Mode"}
           </button>
          
           <button
@@ -202,7 +202,7 @@ export default function GoalDetailPage() {
           },
           {
             label: "Streak",
-            value: `${stats.streak}d 🔥`,
+            value: `${stats.streak}d`,
             color: stats.streak > 0 ? "var(--green)" : "var(--text3)",
           },
           {
